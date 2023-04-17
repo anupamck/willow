@@ -5,7 +5,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-# Replace the variables below with your MySQL database credentials
 config = {
     'user': 'u355617091_anupamck',
     'password': os.getenv('DB_PASSWORD'),
@@ -21,7 +20,7 @@ CORS(app)
 @app.route('/contacts')
 def get_contacts():
     with mysql.connector.connect(**config) as cnx:
-        with cnx.cursor() as cursor:
+        with cnx.cursor() as cursor: # using a with block here opens a new connection ensures the cursor is closed when the block is exited
             cursor.execute('SELECT id, name, frequency FROM contacts ORDER BY name ASC')
             contacts = cursor.fetchall()
 
@@ -46,6 +45,26 @@ def interactions(person_id, contact_name):
                 interaction_dict = {"date": interaction[2], "title": interaction[3], "notes": interaction[4]}
                 interaction_dicts.append(interaction_dict)
         return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name)
+
+@app.route('/home')
+def home():
+    with mysql.connector.connect(**config) as cnx:
+        with cnx.cursor() as cursor:
+            cursor.execute('''SELECT c.id, c.name, c.frequency, max(i.date) as last_interaction
+                            FROM contacts c
+                            LEFT JOIN interactions i ON i.person_id = c.id
+                            GROUP BY c.id, c.name, c.frequency
+                            HAVING (DATEDIFF(NOW(), max(i.date))) 
+                            >= c.frequency AND c.frequency > 0
+                            ORDER BY c.frequency ASC;''')
+            overdue_contacts = cursor.fetchall()
+
+            # Convert the list of lists to a list of dictionaries
+            overdue_dicts = []
+            for contact in overdue_contacts:
+                overdue_dict = {"id": contact[0], "name": contact[1], "frequency": contact[2], "last_interaction": contact[3]}
+                overdue_dicts.append(overdue_dict)
+            return render_template('home.html', contacts=overdue_dicts)
 
 # Start server
 if __name__ == '__main__':
