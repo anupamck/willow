@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Willow - Contacts</title>
+  <!-- Add any stylesheets or scripts here -->
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
+</head>
+<body>
+    <h1>My Contacts</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Frequency</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for contact in contacts %}
+        <tr>
+          <td><a href="{{ url_for('interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
+          <td>{{ contact.frequency }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
