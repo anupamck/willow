@@ -19,12 +19,13 @@
       <tbody>
         {% for contact in contacts %}
         <tr>
-          <td><a href="{{ url_for('interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
+          <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
           <td>{{ contact.frequency }}</td>
           <td>{{ contact.last_interaction }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+    <a href="{{ url_for('get_contacts') }}"><button>Contacts</button></a>
   </body>
 </html>

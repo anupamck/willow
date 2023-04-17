@@ -33,7 +33,7 @@ def get_contacts():
 
 # Create route to fetch interactions data
 @app.route('/interactions/<int:person_id>/<string:contact_name>')
-def interactions(person_id, contact_name):
+def get_interactions(person_id, contact_name):
     with mysql.connector.connect(**config) as cnx:
         with cnx.cursor() as cursor:
             cursor.execute('SELECT * FROM interactions WHERE person_id = %s', (person_id,))
@@ -47,7 +47,7 @@ def interactions(person_id, contact_name):
         return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name)
 
 @app.route('/home')
-def home():
+def get_home():
     with mysql.connector.connect(**config) as cnx:
         with cnx.cursor() as cursor:
             cursor.execute('''SELECT c.id, c.name, c.frequency, max(i.date) as last_interaction
