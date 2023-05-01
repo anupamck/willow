@@ -1,6 +1,14 @@
+a:link, a:visited {
+  color: #189ad3;
+}
+
+.table-container {
+  width: 50%;
+}
+
 table {
     border-collapse: collapse;
-    width: 50%;
+    width: 100%;
   }
   
   th, td { 
@@ -24,6 +32,9 @@ table {
     margin: 30px 20px;
     border: none;
     cursor: pointer;
-    width: 10%;
   }
-  
+
+  button.delete-button {
+    background-color: #f44336;
+    float: right;
+  }

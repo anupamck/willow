@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, jsonify, render_template
+from flask import Flask, render_template, redirect, url_for, send_from_directory
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
@@ -36,7 +36,7 @@ def get_contacts():
 def get_interactions(person_id, contact_name):
     with mysql.connector.connect(**config) as cnx:
         with cnx.cursor() as cursor:
-            cursor.execute('SELECT * FROM interactions WHERE person_id = %s', (person_id,))
+            cursor.execute('SELECT * FROM interactions WHERE person_id = %s ORDER BY date DESC', (person_id,))
             interactions = cursor.fetchall()
 
             # Convert the list of lists to a list of dictionaries
@@ -44,7 +44,9 @@ def get_interactions(person_id, contact_name):
             for interaction in interactions:
                 interaction_dict = {"date": interaction[2], "title": interaction[3], "notes": interaction[4]}
                 interaction_dicts.append(interaction_dict)
-        return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name)
+        return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name, person_id=person_id)
+
+
 
 @app.route('/home')
 def get_home():
@@ -65,6 +67,14 @@ def get_home():
                 overdue_dict = {"id": contact[0], "name": contact[1], "frequency": contact[2], "last_interaction": contact[3]}
                 overdue_dicts.append(overdue_dict)
             return render_template('home.html', contacts=overdue_dicts)
+        
+@app.route('/delete_contact/<int:person_id>')
+def delete_contact(person_id):
+    with mysql.connector.connect(**config) as cnx:
+        with cnx.cursor() as cursor:
+            cursor.execute('DELETE FROM contacts WHERE id = %s', (person_id,))
+            cnx.commit()
+    return redirect(url_for('get_contacts'))
 
 # Start server
 if __name__ == '__main__':

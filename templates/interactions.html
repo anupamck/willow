@@ -3,28 +3,32 @@
 <head>
     <title>Willow - Interactions</title>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
+    <script src="{{ url_for('static', filename='confirmDelete.js') }}"></script>
 </head>
 <body>
     <h1>Interactions - {{ contact_name }}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Title</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for interaction in interactions %}
-            <tr>
-                <td>{{ interaction.date }}</td>
-                <td>{{ interaction.title }}</td>
-                <td>{{ interaction.notes }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{{ url_for('get_home') }}"><button>Home</button></a>
-    <a href="{{ url_for('get_contacts') }}"><button>Contacts</button></a>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for interaction in interactions %}
+                <tr>
+                    <td>{{ interaction.date }}</td>
+                    <td>{{ interaction.title }}</td>
+                    <td>{{ interaction.notes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('get_home') }}"><button>Home</button></a>
+        <a href="{{ url_for('get_contacts') }}"><button>Contacts</button></a>
+        <button type="button" class="delete-button" id="delete" onclick= "confirmDelete('{{person_id}}', 'delete_contact')">Delete Contact</button>
+    </div>
 </body>
 </html>
