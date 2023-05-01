@@ -42,7 +42,7 @@ def get_interactions(person_id, contact_name):
             # Convert the list of lists to a list of dictionaries
             interaction_dicts = []
             for interaction in interactions:
-                interaction_dict = {"date": interaction[2], "title": interaction[3], "notes": interaction[4]}
+                interaction_dict = {"id": interaction[0], "date": interaction[2], "title": interaction[3], "notes": interaction[4]}
                 interaction_dicts.append(interaction_dict)
         return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name, person_id=person_id)
 
@@ -75,6 +75,14 @@ def delete_contact(person_id):
             cursor.execute('DELETE FROM contacts WHERE id = %s', (person_id,))
             cnx.commit()
     return redirect(url_for('get_contacts'))
+
+@app.route('/delete_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>')
+def delete_interaction(interaction_id, person_id, contact_name):
+    with mysql.connector.connect(**config) as cnx:
+        with cnx.cursor() as cursor:
+            cursor.execute('DELETE FROM interactions WHERE id = %s', (interaction_id,))
+            cnx.commit()
+    return redirect(url_for ('get_interactions', person_id=person_id, contact_name=contact_name))
 
 # Start server
 if __name__ == '__main__':
