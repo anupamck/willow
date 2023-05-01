@@ -8,24 +8,26 @@
 </head>
 <body>
     <h1>Home</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Frequency</th>
-          <th>Last Interaction</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for contact in contacts %}
-        <tr>
-          <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
-          <td>{{ contact.frequency }}</td>
-          <td>{{ contact.last_interaction }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <section class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Frequency</th>
+              <th>Last Interaction</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for contact in contacts %}
+            <tr>
+              <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
+              <td>{{ contact.frequency }}</td>
+              <td class="date">{{ contact.last_interaction }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </section>
     <a href="{{ url_for('get_contacts') }}"><button>Contacts</button></a>
   </body>
 </html>
