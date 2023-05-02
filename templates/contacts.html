@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Willow - Contacts</title>
-    <!-- Add any stylesheets or scripts here -->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
+    <script src="{{ url_for('static', filename='confirmDeleteContact.js') }}"></script>
+    <script src="{{ url_for('static', filename='editContact.js') }}"></script>
   </head>
   <body>
     <h1>My Contacts</h1>
@@ -14,6 +15,8 @@
           <tr>
             <th>Name</th>
             <th>Frequency</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -21,11 +24,26 @@
           <tr>
             <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
             <td>{{ contact.frequency }}</td>
+            <td><button class="edit-button" onclick="editContact('{{ contact.id }}', '{{ contact.name }}', '{{ contact.frequency }}')">Edit</button></td>
+            <td><button class="delete-button" onclick="confirmDeleteContact('{{ contact.id }}')">Delete</button></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </section>
     <a href="{{ url_for('get_home') }}"><button>Home</button></a>
+    <div class="modal-shell">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form action="/update_contact" method="POST">
+          <input type="hidden" id="contact-id" name="id" value="">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required><br><br>
+          <label for="frequency">Frequency:</label>
+          <input type="number" id="frequency" name="frequency" required min="1"><br><br>
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

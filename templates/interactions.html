@@ -3,8 +3,8 @@
 <head>
     <title>Willow - Interactions</title>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
-    <script src="{{ url_for('static', filename='confirmDelete.js') }}"></script>
     <script src="{{ url_for('static', filename='confirmDeleteInteraction.js') }}"></script>
+    <script src="{{ url_for('static', filename='editInteraction.js') }}"></script>
 </head>
 <body>
     <h1>Interactions - {{ contact_name }}</h1>
@@ -25,7 +25,7 @@
                     <td class="date">{{ interaction.date }}</td>
                     <td class="title">{{ interaction.title }}</td>
                     <td class="notes">{{ interaction.notes }}</td>
-                    <td><button>Edit</button></td>
+                    <td><button class="edit-button" onclick="editInteraction( '{{ interaction.id }}', '{{ interaction.date }}', '{{ interaction.title }}', '{{ interaction.notes }}', '{{ person_id }}', '{{ contact_name }}')">Edit</button></td>
                     <td><button class="delete-button" onclick="confirmDeleteInteraction('{{ interaction.id }}', '{{ person_id }}', '{{ contact_name }}')">Delete</button></td>
                 </tr>
                 {% endfor %}
@@ -33,7 +33,23 @@
         </table>
         <a href="{{ url_for('get_home') }}"><button>Home</button></a>
         <a href="{{ url_for('get_contacts') }}"><button>Contacts</button></a>
-        <button class="delete-button" onclick= "confirmDelete('{{ person_id }}')">Delete Contact</button>
+        <div class="modal-shell">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <form action="/update_interaction" method="POST">
+                <input type="hidden" id="interaction-id" name="id" value="">
+                <input type="hidden" id="person-id" name="person_id" value="">
+                <input type="hidden" id="contact-name" name="contact_name" value="">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required><br><br>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required><br><br>
+                <label for="notes">Notes:</label>
+                <input type="text" id="notes" name="notes" required><br><br>
+                <button type="submit">Save Changes</button>
+              </form>
+            </div>
+          </div>
     </section>
 </body>
 </html>
