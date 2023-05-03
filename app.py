@@ -119,6 +119,40 @@ def update_interaction():
     # Redirect the user back to the interactions page
     return redirect(url_for('get_interactions', person_id=person_id, contact_name=contact_name))
 
+@app.route('/add_contact', methods=['POST'])
+def add_contact():
+    # Get the form data
+    name = request.form['name']
+    frequency = request.form['frequency']
+
+    # Add the contact to the database
+    with mysql.connector.connect(**config) as cnx:
+        with cnx.cursor() as cursor:
+            cursor.execute('INSERT INTO contacts (name, frequency) VALUES (%s, %s)', (name, frequency))
+            cnx.commit()
+
+    # Redirect the user back to the contacts page
+    return redirect(url_for('get_contacts'))
+
+@app.route('/add_interaction', methods=['POST'])
+def add_interaction():
+    # Get the form data
+    date = request.form['date']
+    title = request.form['title']
+    notes = request.form['notes']
+    person_id = request.form['person_id']
+    contact_name = request.form['contact_name']
+
+    # Add the interaction to the database
+    with mysql.connector.connect(**config) as cnx:
+        with cnx.cursor() as cursor:
+            cursor.execute('INSERT INTO interactions (person_id, date, title, notes) VALUES (%s, %s, %s, %s)', (person_id, date, title, notes))
+            cnx.commit()
+
+    # Redirect the user back to the interactions page
+    return redirect(url_for('get_interactions', person_id=person_id, contact_name=contact_name))
+
+
 # Start server
 if __name__ == '__main__':
     app.run(debug=True)

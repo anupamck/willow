@@ -8,13 +8,13 @@ function editInteraction(id, date, title, notes, person_id, contact_name) {
     document.getElementById("contact-name").value = contact_name;
   
     // Get the modal's shell
-    const modal = document.getElementsByClassName("modal-shell")[0];
+    const modal = document.getElementById("modal-shell-edit");
 
     // display the popup window
     modal.style.display = "block";
 
     // Get the <span> element that closes the modal
-    const closeButton = document.getElementsByClassName("close")[0];
+    const closeButton = document.getElementById("close-edit");
 
     // When the user clicks on <span> (x), close the modal
     closeButton.onclick = function() {

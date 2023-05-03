@@ -1,17 +1,16 @@
-function editContact(id, name, frequency) {
-    // set the values of the popup window form fields
-    document.getElementById("name").value = name;
-    document.getElementById("frequency").value = frequency;
-    document.getElementById("contact-id").value = id;
-  
+function addInteraction(person_id, contact_name) {
+    // retrieve values from hidden form fields
+    document.getElementById("person-id-add").value = person_id;
+    document.getElementById("contact-name-add").value = contact_name;
+
     // Get the modal's shell
-    const modal = document.getElementById("modal-shell-edit");
+    const modal = document.getElementById("modal-shell-add");
 
     // display the popup window
     modal.style.display = "block";
 
     // Get the <span> element that closes the modal
-    const closeButton = document.getElementById("close-edit");
+    const closeButton = document.getElementById("close-add");
 
     // When the user clicks on <span> (x), close the modal
     closeButton.onclick = function() {

@@ -5,6 +5,7 @@
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
     <script src="{{ url_for('static', filename='confirmDeleteInteraction.js') }}"></script>
     <script src="{{ url_for('static', filename='editInteraction.js') }}"></script>
+    <script src="{{ url_for('static', filename='addInteraction.js') }}"></script>
 </head>
 <body>
     <h1>Interactions - {{ contact_name }}</h1>
@@ -33,9 +34,10 @@
         </table>
         <a href="{{ url_for('get_home') }}"><button>Home</button></a>
         <a href="{{ url_for('get_contacts') }}"><button>Contacts</button></a>
-        <div class="modal-shell">
+        <button onclick="addInteraction('{{ person_id }}', '{{ contact_name }}')">Add Interaction</button>
+        <div class="modal-shell" id="modal-shell-edit">
             <div class="modal-content">
-              <span class="close">&times;</span>
+              <span class="close" id="close-edit">&times;</span>
               <form action="/update_interaction" method="POST">
                 <input type="hidden" id="interaction-id" name="id" value="">
                 <input type="hidden" id="person-id" name="person_id" value="">
@@ -49,7 +51,23 @@
                 <button type="submit">Save Changes</button>
               </form>
             </div>
-          </div>
+        </div>
+        <div class="modal-shell" id="modal-shell-add">
+            <div class="modal-content">
+              <span class="close" id="close-add">&times;</span>
+              <form action="/add_interaction" method="POST">
+                <input type="hidden" id="person-id-add" name="person_id" value="">
+                <input type="hidden" id="contact-name-add" name="contact_name" value="">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required><br><br>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required><br><br>
+                <label for="notes">Notes:</label>
+                <input type="text" id="notes" name="notes" required><br><br>
+                <button type="submit">Add Interaction</button>
+              </form>
+            </div>
+        </div>
     </section>
 </body>
 </html>
