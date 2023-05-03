@@ -1,6 +1,6 @@
 function editContact(id, name, frequency) {
     // set the values of the popup window form fields
-    document.getElementById("name").value = name;
+    document.getElementById("name").value = decodeHtml(name);
     document.getElementById("frequency").value = frequency;
     document.getElementById("contact-id").value = id;
   

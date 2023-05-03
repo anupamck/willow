@@ -1,11 +1,11 @@
 function editInteraction(id, date, title, notes, person_id, contact_name) {
     // set the values of the popup window form fields
-    document.getElementById("date").value = date;
-    document.getElementById("title").value = title;
-    document.getElementById("notes").value = notes;
-    document.getElementById("interaction-id").value = id;
-    document.getElementById("person-id").value = person_id;
-    document.getElementById("contact-name").value = contact_name;
+    document.getElementById("date-edit").value = date;
+    document.getElementById("title-edit").value = decodeHtml(title);
+    document.getElementById("notes-edit").value = decodeHtml(notes);
+    document.getElementById("interaction-id-edit").value = id;
+    document.getElementById("person-id-edit").value = person_id;
+    document.getElementById("contact-name-edit").value = contact_name;
   
     // Get the modal's shell
     const modal = document.getElementById("modal-shell-edit");

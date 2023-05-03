@@ -27,7 +27,7 @@ def get_contacts():
             # Convert the list of lists to a list of dictionaries
             contact_dicts = []
             for contact in contacts:
-                contact_dict = {"id": contact[0], "name": contact[1], "frequency": contact[2]}
+                contact_dict = {"id": contact[0], "name": contact[1].replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), "frequency": contact[2]}
                 contact_dicts.append(contact_dict)
         return render_template('contacts.html', contacts=contact_dicts)
 
@@ -42,9 +42,9 @@ def get_interactions(person_id, contact_name):
             # Convert the list of lists to a list of dictionaries
             interaction_dicts = []
             for interaction in interactions:
-                interaction_dict = {"id": interaction[0], "date": interaction[2], "title": interaction[3], "notes": interaction[4]}
+                interaction_dict = {"id": interaction[0], "date": interaction[2], "title": interaction[3].replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), "notes": interaction[4].replace("'", "&#39;").replace('"', "&#34;").replace("\n", "<br>")}
                 interaction_dicts.append(interaction_dict)
-        return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name, person_id=person_id)
+        return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name.replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), person_id=person_id)
 
 @app.route('/home')
 def get_home():
@@ -62,7 +62,7 @@ def get_home():
             # Convert the list of lists to a list of dictionaries
             overdue_dicts = []
             for contact in overdue_contacts:
-                overdue_dict = {"id": contact[0], "name": contact[1], "frequency": contact[2], "last_interaction": contact[3]}
+                overdue_dict = {"id": contact[0], "name": contact[1].replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), "frequency": contact[2], "last_interaction": contact[3]}
                 overdue_dicts.append(overdue_dict)
             return render_template('home.html', contacts=overdue_dicts)
         

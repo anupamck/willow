@@ -1,5 +1,7 @@
 function addInteraction(person_id, contact_name) {
+    const today = new Date().toISOString().slice(0, 10);
     // retrieve values from hidden form fields
+    document.getElementById("date-add").value = today;
     document.getElementById("person-id-add").value = person_id;
     document.getElementById("contact-name-add").value = contact_name;
 
