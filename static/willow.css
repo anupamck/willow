@@ -99,12 +99,12 @@ table {
   cursor: pointer;
 }
 
-.notes {
+.notes-input {
   display: flex;
   flex-direction: row;
   }
   
-.notes label {
+.notes-input label {
   margin-right: 0.5rem;
 }
   
