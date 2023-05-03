@@ -42,7 +42,7 @@ def get_interactions(person_id, contact_name):
             # Convert the list of lists to a list of dictionaries
             interaction_dicts = []
             for interaction in interactions:
-                interaction_dict = {"id": interaction[0], "date": interaction[2], "title": interaction[3].replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), "notes": interaction[4].replace("'", "&#39;").replace('"', "&#34;").replace("\n", "<br>")}
+                interaction_dict = {"id": interaction[0], "date": interaction[2], "title": interaction[3].replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), "notes": interaction[4].replace("'", "&#39;").replace('"', "&#34;").replace("\n", "&#10;")}
                 interaction_dicts.append(interaction_dict)
         return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name.replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), person_id=person_id)
 
