@@ -98,4 +98,13 @@ table {
   text-decoration: none;
   cursor: pointer;
 }
+
+.notes {
+  display: flex;
+  flex-direction: row;
+  }
+  
+.notes label {
+  margin-right: 0.5rem;
+}
   
