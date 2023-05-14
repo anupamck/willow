@@ -8,7 +8,7 @@ load_dotenv()
 config = {
     'user': 'u355617091_anupamck',
     'password': os.getenv('DB_PASSWORD'),
-    'host': 'sql169.main-hosting.eu',
+    'host': 'sql1017.main-hosting.eu',
     'database': 'u355617091_willow'
 }
 
