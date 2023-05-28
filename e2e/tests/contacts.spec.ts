@@ -5,11 +5,19 @@ import { createTestContactRow } from '../helper/contacts';
 test.beforeEach(async ({ page }) => {
     await page.goto('./contacts');
     await deleteTestContactRows(page);
-    await createTestContactRow(page);
+});
+
+test('contacts page has the correct layout', async ({ page }) => {
+    await expect(page).toHaveURL('/contacts');
+    await expect(page.getByRole('heading', { name: 'My Contacts' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Home' })).toBeVisible();
+    await expect(page.getByRole('table', {  name: /contacts\-table/i})).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Add Contact' })).toBeVisible();
 });
 
 test('should be able to edit test contact', async ({ page }) => {
     await page.goto('./contacts');
+    await createTestContactRow(page);
     const testUserRow = page.getByRole('row')
         .filter({ hasText: 'Test User' })
         .filter({ hasText: '20' });
