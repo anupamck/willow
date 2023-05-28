@@ -84,12 +84,20 @@ def delete_interaction(interaction_id, person_id, contact_name):
 
 from flask import request
 
-@app.route('/update_contact', methods=['POST'])
-def update_contact():
-    # Get the form data
-    name = request.form['name']
-    frequency = request.form['frequency']
-    person_id = request.form['id']
+@app.route('/update_contact/<int:person_id>', methods=['POST', 'GET'])
+def update_contact(person_id):
+    if request.method == 'GET':
+        # Fetch contact info from database to prefil edit form
+        with mysql.connector.connect(**config) as cnx:
+            with cnx.cursor(buffered=True) as cursor:
+                cursor.execute('SELECT * FROM contacts WHERE id = %s', (person_id,))
+            contact = cursor.fetchone()
+        return render_template('contactForm.html', contact=contact, form_type='edit')
+    
+    elif request.method == 'POST':
+      # Get the form data
+        name = request.form['name']
+        frequency = request.form['frequency']
 
     # Update the contact in the database
     with mysql.connector.connect(**config) as cnx:
@@ -119,8 +127,11 @@ def update_interaction():
     # Redirect the user back to the interactions page
     return redirect(url_for('get_interactions', person_id=person_id, contact_name=contact_name))
 
-@app.route('/add_contact', methods=['POST'])
+@app.route('/add_contact', methods=['POST', 'GET'])
 def add_contact():
+    if request.method == 'GET':
+        return render_template('contactForm.html', form_type='add')
+
     # Get the form data
     name = request.form['name']
     frequency = request.form['frequency']
