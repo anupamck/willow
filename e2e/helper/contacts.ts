@@ -8,10 +8,10 @@ export async function deleteTestContactRows(page) {
         .filter({ hasText: '30' });
 
     page.on('dialog', dialog => dialog.accept());
-    for (let i = 0; i < await testUserRows.count(); i++) {
+    while (await testUserRows.count() > 0) {
         await testUserRows.first().getByRole('button', { name: 'Delete' }).click();
     }
-    for (let i = 0; i < await testUserEditedRows.count(); i++) {
+    while (await testUserEditedRows.count() > 0) {
         await testUserEditedRows.first().getByRole('button', { name: 'Delete' }).click();
     }
 }
