@@ -21,7 +21,7 @@
         <tbody>
           {% for contact in contacts %}
           <tr>
-            <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name|safe }}</a></td>
+            <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
             <td>{{ contact.frequency }}</td>
             <td><a href="{{ url_for('update_contact', person_id=contact.id) }}"><button class="edit-button">Edit</button></a></td>
             <td><button class="delete-button" onclick="confirmDeleteContact('{{ contact.id }}')">Delete</button></td>

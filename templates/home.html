@@ -19,7 +19,7 @@
           <tbody>
             {% for contact in contacts %}
             <tr>
-              <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name|safe }}</a></td>
+              <td><a href="{{ url_for('get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{ contact.name }}</a></td>
               <td>{{ contact.frequency }}</td>
               <td class="date">{{ contact.last_interaction }}</td>
             </tr>
