@@ -4,7 +4,6 @@ import { createTestContactRow } from '../helper/contacts';
 
 test.beforeEach(async ({ page }) => {
     await page.goto('./contacts');
-    await deleteTestContactRows(page);
 });
 
 test('contacts page has the correct layout', async ({ page }) => {
@@ -15,10 +14,12 @@ test('contacts page has the correct layout', async ({ page }) => {
     await expect(page.getByRole('button', { name: 'Add Contact' })).toBeVisible();
 });
 
-test.only('should be able to edit test contact', async ({ page }) => {
+test('should be able to edit test contact', async ({ page }) => {
     const testUserName = "Test User's";
     const testUserNameEdited = '"Test User 2"';
-    await createTestContactRow(page);
+    await deleteTestContactRows(page, testUserName);
+    await deleteTestContactRows(page, testUserNameEdited);
+    await createTestContactRow(page, testUserName, '20');
     const testUserRow = page.getByRole('row')
         .filter({ hasText: testUserName })
         .filter({ hasText: '20' });
