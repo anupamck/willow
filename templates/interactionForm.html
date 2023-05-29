@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Willow - Contact Form</title>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
+</head>
+
+<body>
+  <h1>
+    {% if form_type == 'add' %}
+    Add Interaction
+    {%else %}
+    Edit Interaction
+    {% endif %}
+  </h1>
+  <div class="modal-shell" id="modal-shell">
+    <div class="modal-content">
+      <a href="{{ url_for('get_interactions', person_id=person_id, contact_name=contact_name) }}"><span class="close"
+          id="close-modal">&times;</span></a>
+      {% if form_type == 'add' %}
+      <form action="{{ url_for('add_interaction', person_id=person_id, contact_name=contact_name) }}" method="POST">
+        <input type="hidden" id="person-id" name="person_id" value="{{ person_id }}">
+        <input type="hidden" id="contact-name" name="contact_name" value="{{ contact_name }}">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required><br><br>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br><br>
+        <div class="notes-input">
+          <label for="notes">Notes:</label>
+          <textarea id="notes" name="notes" rows="10" cols="50" required></textarea><br><br>
+        </div>
+        <button type="submit">Save Changes</button>
+      </form>
+      {% else %}
+      <form
+        action="{{ url_for('update_interaction',  interaction_id=interaction[0], person_id=person_id, contact_name=contact_name) }}"
+        method="POST">
+        <input type="hidden" id="interaction-id" name="id" value="{{ interaction[0] }}">
+        <input type="hidden" id="person-id" name="person_id" value="{{ interaction[1] }}">
+        <input type="hidden" id="contact-name" name="contact_name" value="{{ contact_name }}">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="{{ interaction[2] }}" required><br><br>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="{{ interaction[3] }}" required><br><br>
+        <div class="notes-input">
+          <label for="notes">Notes:</label>
+          <textarea id="notes" name="notes" rows="10" cols="50" required>{{ interaction[4] }}</textarea><br><br>
+        </div>
+        <button type="submit">Save Changes</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</body>
+
+</html>

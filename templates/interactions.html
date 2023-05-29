@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Willow - Interactions</title>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
     <script src="{{ url_for('static', filename='utils.js') }}"></script>
     <script src="{{ url_for('static', filename='confirmDeleteInteraction.js') }}"></script>
-    <script src="{{ url_for('static', filename='editInteraction.js') }}"></script>
-    <script src="{{ url_for('static', filename='addInteraction.js') }}"></script>
 </head>
+
 <body>
-    <h1>Interactions - {{ contact_name|safe }}</h1>
+    <h1>Interactions - {{ contact_name }}</h1>
     <section class="table-container">
         <table>
             <thead>
@@ -25,54 +25,23 @@
                 {% for interaction in interactions %}
                 <tr>
                     <td class="date">{{ interaction.date }}</td>
-                    <td class="title">{{ interaction.title|safe }}</td>
-                    <td class="notes">{{ interaction.notes|safe }}</td>
-                    <td><button class="edit-button" onclick="editInteraction( '{{ interaction.id }}', '{{ interaction.date }}', '{{ interaction.title }}', '{{ interaction.notes }}', '{{ person_id }}', '{{ contact_name }}')">Edit</button></td>
-                    <td><button class="delete-button" onclick="confirmDeleteInteraction('{{ interaction.id }}', '{{ person_id }}', '{{ contact_name }}')">Delete</button></td>
+                    <td class="title">{{ interaction.title }}</td>
+                    <td class="notes">{{ interaction.notes }}</td>
+                    <td><a
+                            href="{{ url_for('update_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"><button
+                                class="edit-button">Edit</button></a></td>
+                    <td><button class="delete-button"
+                            onclick="confirmDeleteInteraction('{{ interaction.id }}', '{{ person_id }}', '{{ contact_name }}')">Delete</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         <a href="{{ url_for('get_home') }}"><button>Home</button></a>
         <a href="{{ url_for('get_contacts') }}"><button>Contacts</button></a>
-        <button onclick="addInteraction('{{ person_id }}', '{{ contact_name }}')">Add Interaction</button>
-        <div class="modal-shell" id="modal-shell-edit">
-            <div class="modal-content">
-              <span class="close" id="close-edit">&times;</span>
-              <form action="/update_interaction" method="POST">
-                <input type="hidden" id="interaction-id-edit" name="id" value="">
-                <input type="hidden" id="person-id-edit" name="person_id" value="">
-                <input type="hidden" id="contact-name-edit" name="contact_name" value="">
-                <label for="date">Date:</label>
-                <input type="date" id="date-edit" name="date" required><br><br>
-                <label for="title">Title:</label>
-                <input type="text" id="title-edit" name="title" required><br><br>
-                <div class="notes-input">
-                    <label for="notes">Notes:</label>
-                    <textarea id="notes-edit" name="notes" rows="10" cols="50" required></textarea><br><br>
-                </div>
-                <button type="submit">Save Changes</button>
-              </form>
-            </div>
-        </div>
-        <div class="modal-shell" id="modal-shell-add">
-            <div class="modal-content">
-              <span class="close" id="close-add">&times;</span>
-              <form action="/add_interaction" method="POST">
-                <input type="hidden" id="person-id-add" name="person_id" value="">
-                <input type="hidden" id="contact-name-add" name="contact_name" value="">
-                <label for="date">Date:</label>
-                <input type="date" id="date-add" name="date" required><br><br>
-                <label for="title">Title:</label>
-                <input type="text" id="title-add" name="title" required><br><br>
-                <div class="notes-input">
-                    <label for="notes">Notes:</label>
-                    <textarea id="notes-add" name="notes" rows="10" cols="50" required></textarea><br><br>
-                </div>
-                <button type="submit">Add Interaction</button>
-              </form>
-            </div>
-        </div>
+        <a href="{{ url_for('add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
+                Interaction</button></a>
     </section>
 </body>
+
 </html>
