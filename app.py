@@ -46,7 +46,7 @@ def get_interactions(person_id, contact_name):
                 interaction_dicts.append(interaction_dict)
         return render_template('interactions.html', interactions=interaction_dicts, contact_name=contact_name.replace("'", "&#39;").replace('"', "&#34;").replace("\n", ""), person_id=person_id)
 
-@app.route('/home')
+@app.route('/')
 def get_home():
     with mysql.connector.connect(**config) as cnx:
         with cnx.cursor() as cursor:
