@@ -8,6 +8,10 @@ test('home page has the correct layout', async ({ page }) => {
     await expect(page).toHaveURL('/');
     await expect(page.getByRole('heading', { name: 'Home' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Contacts' })).toBeVisible();
-    await expect(page.getByRole('table', {  name: /home\-table/i})).toBeVisible();
+    await expect(page.getByRole('table', { name: /home\-table/i })).toBeVisible();
+});
+
+test('overdue user appears on homepage', async ({ page }) => {
+    await expect(page.getByRole('row', { name: /Overdue Test User/i })).toBeVisible();
 });
 
