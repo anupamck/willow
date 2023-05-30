@@ -25,7 +25,6 @@ test('should be able to edit test interaction', async ({ page }) => {
         .filter({ hasText: '2021-01-01' })
         .filter({ hasText: '"Test Notes"' });
     await testInteractionRow.getByRole('button', { name: 'Edit' }).click();
-    // give me a regex to ensure that the url contains 'update_interaction'
     await expect(page).toHaveURL(/\/update_interaction\/.*/)
     await expect(page.getByLabel('Title:')).toHaveValue(testInteractionTitle);
     await expect(page.getByLabel('Date:')).toHaveValue('2021-01-01');
