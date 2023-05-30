@@ -9,6 +9,7 @@ export async function deleteTestContactRows(page, testUserName) {
               }
           });
         await testUserRows.first().getByRole('button', { name: 'Delete' }).click();
+        await page.waitForTimeout(500);
     }
 }
 
