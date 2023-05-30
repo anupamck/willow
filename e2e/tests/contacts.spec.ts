@@ -37,4 +37,14 @@ test('should be able to edit test contact', async ({ page }) => {
     expect(await editedRow.count()).toBe(1);
 });
 
+test('Cancelling edit contact modal should redirect user back to contacts page', async ({ page }) => {
+    const testUserRow = page.getByRole('row')
+        .filter({ hasText: 'Interaction test user' })
+    await testUserRow.getByRole('button', { name: 'Edit' }).click();
+    await page.locator('#close-modal').click();
+    await expect(page).toHaveURL('/contacts');
+    await expect((page).getByRole('heading', { name: 'My Contacts' })).toBeVisible();
+}
+);
+
 
