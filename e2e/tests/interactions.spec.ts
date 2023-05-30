@@ -6,6 +6,14 @@ test.beforeEach(async ({ page }) => {
     await page.getByRole('link', { name: /Interaction test user/ }).click();
 });
 
+test('interactions page has the correct layout', async ({ page }) => {
+    await expect(page).toHaveURL(/\/interactions\/.*/);
+    await expect(page.getByRole('heading', { name: 'Interaction test user' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Home' })).toBeVisible();
+    await expect(page.getByRole('table', { name: /interactions\-table/ })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Add Interaction' })).toBeVisible();
+});
+
 test('should be able to edit test interaction', async ({ page }) => {
     const testInteractionTitle = "Test Interaction's";
     const testInteractionTitleEdited = '"Test Interaction 2"';
@@ -38,13 +46,6 @@ test('Cancelling edit interaction modal should redirect user back to interaction
     const testInteractionRow = page.getByRole('row')
         .filter({ hasText: 'Click on x - Edit' })
     await testInteractionRow.getByRole('button', { name: 'Edit' }).click();
-    await page.locator('#close-modal').click();
-    await expect(page).toHaveURL(/\/interactions/);
-    await expect((page).getByRole('heading', { name: 'Interactions - Interaction test user' })).toBeVisible();
-});
-
-test('Cancelling add interaction modal should redirect user back to interactions page', async ({ page }) => {
-    await page.getByRole('button', { name: 'Add Interaction' }).click();
     await page.locator('#close-modal').click();
     await expect(page).toHaveURL(/\/interactions/);
     await expect((page).getByRole('heading', { name: 'Interactions - Interaction test user' })).toBeVisible();
