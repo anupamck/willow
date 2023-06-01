@@ -1,13 +1,13 @@
 export async function deleteTestContactRows(page, testUserName) {
     const testUserRows = page.getByRole('row')
         .filter({ hasText: testUserName })
-        
+
     while (await testUserRows.count() > 0) {
         page.on('dialog', async dialog => {
             if (!dialog.handled) {
                 await dialog.accept();
-              }
-          });
+            }
+        });
         await testUserRows.first().getByRole('button', { name: 'Delete' }).click();
         await page.waitForTimeout(500);
     }

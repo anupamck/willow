@@ -6,8 +6,8 @@ export async function deleteTestInteractionRows(page, title) {
         page.on('dialog', async dialog => {
             if (!dialog.handled) {
                 await dialog.accept();
-              }
-          });
+            }
+        });
         await testInteractionRows.first().getByRole('button', { name: 'Delete' }).click();
         await page.waitForTimeout(500);
     }
