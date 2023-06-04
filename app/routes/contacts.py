@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 import mysql.connector
 import os
 from flask import request
@@ -36,19 +36,31 @@ def add_contact():
     if request.method == 'GET':
         return render_template('contactForm.html', form_type='add')
 
-    # Get the form data
-    name = request.form['name']
-    frequency = request.form['frequency']
+    elif request.method == 'POST':
+        # Get the form data
+        name = request.form['name']
+        frequency = request.form['frequency']
+        error = None
 
-    # Add the contact to the database
-    with mysql.connector.connect(**config) as cnx:
-        with cnx.cursor() as cursor:
-            cursor.execute(
-                'INSERT INTO contacts (name, frequency) VALUES (%s, %s)', (name, frequency))
-            cnx.commit()
+        if not name:
+            error = 'Name is required.'
+        if not frequency:
+            error = 'Frequency is required.'
 
-    # Redirect the user back to the contacts page
-    return redirect(url_for('contacts.get_contacts'))
+        if error is not None:
+            flash(error)
+            return render_template('contactForm.html', form_type='add')
+
+        else:
+            # Add the contact to the database
+            with mysql.connector.connect(**config) as cnx:
+                with cnx.cursor() as cursor:
+                    cursor.execute(
+                        'INSERT INTO contacts (name, frequency) VALUES (%s, %s)', (name, frequency))
+                    cnx.commit()
+
+            # Redirect the user back to the contacts page
+            return redirect(url_for('contacts.get_contacts'))
 
 
 @contacts_bp.route('/update_contact/<int:person_id>', methods=['POST', 'GET'])

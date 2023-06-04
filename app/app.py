@@ -6,6 +6,9 @@ from flask_cors import CORS
 
 # Create Flask app
 app = Flask(__name__)
+app.config.from_mapping(
+    SECRET_KEY='dev'
+)
 app.register_blueprint(home_bp)
 app.register_blueprint(contacts_bp)
 app.register_blueprint(interactions_bp)

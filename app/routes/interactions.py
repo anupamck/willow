@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 import mysql.connector
 import os
-from flask import request
+from flask import request, flash
 
 
 interactions_bp = Blueprint('interactions', __name__)
@@ -43,15 +43,26 @@ def add_interaction(person_id, contact_name):
         notes = request.form['notes']
         person_id = request.form['person_id']
         contact_name = request.form['contact_name']
+        error = None
 
-    # Add the interaction to the database
-    with mysql.connector.connect(**config) as cnx:
-        with cnx.cursor() as cursor:
-            cursor.execute(
-                'INSERT INTO interactions (person_id, date, title, notes) VALUES (%s, %s, %s, %s)', (person_id, date, title, notes))
-            cnx.commit()
+        if not date:
+            error = 'Date is required.'
+        if not title or not notes:
+            error = 'Title and notes are required.'
 
-    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
+        if error is not None:
+            flash(error)
+            return render_template('interactionForm.html', person_id=person_id, contact_name=contact_name, form_type='add')
+
+        else:
+            # Add the interaction to the database
+            with mysql.connector.connect(**config) as cnx:
+                with cnx.cursor() as cursor:
+                    cursor.execute(
+                        'INSERT INTO interactions (person_id, date, title, notes) VALUES (%s, %s, %s, %s)', (person_id, date, title, notes))
+                    cnx.commit()
+
+            return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
 
 
 @interactions_bp.route('/update_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
