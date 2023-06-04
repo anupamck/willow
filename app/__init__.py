@@ -1,7 +1,7 @@
 from flask import Flask
-from routes.home import home_bp
-from routes.contacts import contacts_bp
-from routes.interactions import interactions_bp
+from .routes.home import home_bp
+from .routes.contacts import contacts_bp
+from .routes.interactions import interactions_bp
 from flask_cors import CORS
 
 # Create Flask app
