@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, request, flash
+from flask import Blueprint, request, render_template, redirect, url_for, request, flash, make_response
 from ..routes.db import DatabaseConnector, ContactManager
 
 
@@ -43,7 +43,8 @@ def add_contact():
                 contact_manager = ContactManager(connector)
                 contact_manager.add_contact(name, frequency)
             # Redirect the user back to the contacts page
-            return redirect(url_for('contacts.get_contacts'))
+            response = make_response(redirect(url_for('contacts.get_contacts')), 201)
+            return response
 
 
 @contacts_bp.route('/edit_contact/<int:person_id>', methods=['POST', 'GET'])
@@ -59,6 +60,20 @@ def edit_contact(person_id):
         # Get the form data
         name = request.form['name']
         frequency = request.form['frequency']
+        error = None
+
+        if not name:
+            error = 'Name is required.'
+        if not frequency:
+            error = 'Frequency is required.'
+
+        if error is not None:
+            flash(error)
+            with DatabaseConnector() as connector:
+                contact_manager = ContactManager(connector)
+                contact = contact_manager.get_contact(person_id)
+                return render_template('contactForm.html', contact=contact, form_type='edit')
+        
         with DatabaseConnector() as connector:
             contact_manager = ContactManager(connector)
             contact_manager.edit_contact(person_id, name, frequency)
