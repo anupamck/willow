@@ -25,7 +25,7 @@ test('should be able to edit test interaction', async ({ page }) => {
         .filter({ hasText: '2021-01-01' })
         .filter({ hasText: '"Test Notes"' });
     await testInteractionRow.getByRole('button', { name: 'Edit' }).click();
-    await expect(page).toHaveURL(/\/update_interaction\/.*/)
+    await expect(page).toHaveURL(/\/edit_interaction\/.*/)
     await expect(page.getByLabel('Title:')).toHaveValue(testInteractionTitle);
     await expect(page.getByLabel('Date:')).toHaveValue('2021-01-01');
     await expect(page.getByLabel('Notes:')).toHaveValue('"Test Notes"');

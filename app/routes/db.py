@@ -70,7 +70,7 @@ class ContactManager:
             cnx.execute_query(query, params)
             cnx.connection.commit()
 
-    def update_contact(self, person_id, name, frequency):
+    def edit_contact(self, person_id, name, frequency):
         query = 'UPDATE contacts SET name = %s, frequency = %s WHERE id = %s'
         params = (name, frequency, person_id)
         with self.connector as cnx:
@@ -112,7 +112,7 @@ class InteractionManager:
             cnx.execute_query(query, params)
             cnx.connection.commit()
 
-    def update_interaction(self, interaction_id, date, title, notes):
+    def edit_interaction(self, interaction_id, date, title, notes):
         query = 'UPDATE interactions SET date = %s, title = %s, notes = %s WHERE id = %s'
         params = (date, title, notes, interaction_id)
         with self.connector as cnx:

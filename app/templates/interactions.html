@@ -27,7 +27,7 @@
                     <td class="title">{{ interaction.title }}</td>
                     <td class="notes">{{ interaction.notes }}</td>
                     <td><a
-                            href="{{ url_for('interactions.update_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"><button
+                            href="{{ url_for('interactions.edit_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"><button
                                 class="edit-button">Edit</button></a></td>
                     <td><button class="delete-button"
                             onclick="confirmDeleteInteraction('{{ interaction.id }}', '{{ person_id }}', '{{ contact_name }}')">Delete</button>

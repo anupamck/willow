@@ -24,7 +24,7 @@ test('should be able to edit test contact', async ({ page }) => {
         .filter({ hasText: testUserName })
         .filter({ hasText: '20' });
     await testUserRow.getByRole('button', { name: 'Edit' }).click();
-    await expect(page).toHaveURL(/\/update_contact\/.*/)
+    await expect(page).toHaveURL(/\/edit_contact\/.*/)
     await expect(page.getByLabel('Name:')).toHaveValue(testUserName);
     await expect(page.getByLabel('Frequency:')).toHaveValue('20');
     await page.getByLabel('Name:').fill(testUserNameEdited);

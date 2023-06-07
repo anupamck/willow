@@ -51,8 +51,8 @@ def add_interaction(person_id, contact_name):
             return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
 
 
-@interactions_bp.route('/update_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
-def update_interaction(interaction_id, person_id, contact_name):
+@interactions_bp.route('/edit_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
+def edit_interaction(interaction_id, person_id, contact_name):
     # Fetch interaction info from database to prefill edit form
     if request.method == 'GET':
         with DatabaseConnector() as connector:
@@ -72,7 +72,7 @@ def update_interaction(interaction_id, person_id, contact_name):
     # Update the interaction in the database
     with DatabaseConnector() as connector:
         interaction_manager = InteractionManager(connector)
-        interaction_manager.update_interaction(
+        interaction_manager.edit_interaction(
             interaction_id, date, title, notes)
     return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
 

@@ -27,7 +27,7 @@
               href="{{ url_for('interactions.get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{
               contact.name }}</a></td>
           <td>{{ contact.frequency }}</td>
-          <td><a href="{{ url_for('contacts.update_contact', person_id=contact.id) }}"><button
+          <td><a href="{{ url_for('contacts.edit_contact', person_id=contact.id) }}"><button
                 class="edit-button">Edit</button></a></td>
           <td><button class="delete-button" onclick="confirmDeleteContact('{{ contact.id }}')">Delete</button></td>
         </tr>

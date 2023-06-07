@@ -46,8 +46,8 @@ def add_contact():
             return redirect(url_for('contacts.get_contacts'))
 
 
-@contacts_bp.route('/update_contact/<int:person_id>', methods=['POST', 'GET'])
-def update_contact(person_id):
+@contacts_bp.route('/edit_contact/<int:person_id>', methods=['POST', 'GET'])
+def edit_contact(person_id):
     if request.method == 'GET':
         with DatabaseConnector() as connector:
             contact_manager = ContactManager(connector)
@@ -61,7 +61,7 @@ def update_contact(person_id):
         frequency = request.form['frequency']
         with DatabaseConnector() as connector:
             contact_manager = ContactManager(connector)
-            contact_manager.update_contact(person_id, name, frequency)
+            contact_manager.edit_contact(person_id, name, frequency)
         # Redirect the user back to the contacts page
         return redirect(url_for('contacts.get_contacts'))
 
