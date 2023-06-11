@@ -48,7 +48,7 @@ def add_interaction(person_id, contact_name):
                 interaction_manager = InteractionManager(connector)
                 interaction_manager.add_interaction(
                     person_id, date, title, notes)
-            return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
+            return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name), 201)
 
 
 @interactions_bp.route('/edit_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
@@ -58,7 +58,7 @@ def edit_interaction(interaction_id, person_id, contact_name):
         with DatabaseConnector() as connector:
             interaction_manager = InteractionManager(connector)
             interaction = interaction_manager.get_interaction(interaction_id)
-        return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id)
+        return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id, form_type='edit')
 
     elif request.method == 'POST':
         # Get the form data
@@ -68,13 +68,26 @@ def edit_interaction(interaction_id, person_id, contact_name):
         notes = request.form['notes']
         person_id = request.form['person_id']
         contact_name = request.form['contact_name']
+        error = None
+
+        if not date:
+            error = 'Date is required.'
+        if not title or not notes:
+            error = 'Title and notes are required.'
+
+        if error is not None:
+            flash(error)
+            with DatabaseConnector() as connector:
+                interaction_manager = InteractionManager(connector)
+                interaction = interaction_manager.get_interaction(interaction_id)
+                return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id, form_type='edit')
 
     # Update the interaction in the database
     with DatabaseConnector() as connector:
         interaction_manager = InteractionManager(connector)
         interaction_manager.edit_interaction(
             interaction_id, date, title, notes)
-    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
+    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name), 201)
 
 
 @interactions_bp.route('/delete_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>')
@@ -82,4 +95,4 @@ def delete_interaction(interaction_id, person_id, contact_name):
     with DatabaseConnector() as connector:
         interaction_manager = InteractionManager(connector)
         interaction_manager.delete_interaction(interaction_id)
-    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
+    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name), 200)
