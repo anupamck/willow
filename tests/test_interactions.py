@@ -91,7 +91,7 @@ def test_redirects_to_interactions_page_when_interaction_added_successfully(clie
     request_data = {'date': '2023-06-08',
                     'title': 'The battle of Kalinga', 'notes': 'I repent everything so much', 'person_id': '1', 'contact_name': 'Ashoka'}
     response = client.post('/add_interaction/1/Ashoka', data=request_data)
-    assert response.status_code == 201
+    assert response.status_code == 302
     assert b'You should be redirected automatically to the target URL: <a href="/interactions/1/Ashoka">' in response.data
 
 
@@ -119,11 +119,11 @@ def test_redirects_to_interaction_form_when_interaction_edited_successfully(clie
     request_data = {'id': 1, 'date': '2023-06-08',
                     'title': 'The battle of Kalinga', 'notes': 'I repent everything so much. All those lives can never be gotten back again.', 'person_id': '1', 'contact_name': 'Ashoka'}
     response = client.post('/edit_interaction/1/1/Ashoka', data=request_data)
-    assert response.status_code == 201
+    assert response.status_code == 302
     assert b'You should be redirected automatically to the target URL: <a href="/interactions/1/Ashoka">' in response.data
 
 
 def test_delete_interaction(client, mock_database):
     response = client.get('/delete_interaction/1/1/Ashoka')
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert b'You should be redirected automatically to the target URL: <a href="/interactions/1/Ashoka">' in response.data

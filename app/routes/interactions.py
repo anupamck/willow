@@ -48,7 +48,7 @@ def add_interaction(person_id, contact_name):
                 interaction_manager = InteractionManager(connector)
                 interaction_manager.add_interaction(
                     person_id, date, title, notes)
-            return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name), 201)
+            return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
 
 
 @interactions_bp.route('/edit_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
@@ -79,7 +79,8 @@ def edit_interaction(interaction_id, person_id, contact_name):
             flash(error)
             with DatabaseConnector() as connector:
                 interaction_manager = InteractionManager(connector)
-                interaction = interaction_manager.get_interaction(interaction_id)
+                interaction = interaction_manager.get_interaction(
+                    interaction_id)
                 return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id, form_type='edit')
 
     # Update the interaction in the database
@@ -87,7 +88,7 @@ def edit_interaction(interaction_id, person_id, contact_name):
         interaction_manager = InteractionManager(connector)
         interaction_manager.edit_interaction(
             interaction_id, date, title, notes)
-    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name), 201)
+    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
 
 
 @interactions_bp.route('/delete_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>')
@@ -95,4 +96,4 @@ def delete_interaction(interaction_id, person_id, contact_name):
     with DatabaseConnector() as connector:
         interaction_manager = InteractionManager(connector)
         interaction_manager.delete_interaction(interaction_id)
-    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name), 200)
+    return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))

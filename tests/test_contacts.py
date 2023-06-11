@@ -78,7 +78,7 @@ def test_error_thrown_when_contact_added_without_frequency(client, mock_database
 def test_redirects_to_contacts_page_when_contact_added_successfully(client, mock_database):
     request_data = {'name': 'Ashoka', 'frequency': '30'}
     response = client.post('/add_contact', data=request_data)
-    assert response.status_code == 201
+    assert response.status_code == 302
     assert b'You should be redirected automatically to the target URL: <a href="/contacts">' in response.data
 
 
@@ -102,10 +102,11 @@ def test_error_thrown_when_contact_edited_without_frequency(client, mock_databas
 def test_redirects_to_contact_form_when_contact_edited_successfully(client, mock_database):
     request_data = {'name': 'Ashoka', 'frequency': '30'}
     response = client.post('/edit_contact/1', data=request_data)
+    assert response.status_code == 302
     assert b'You should be redirected automatically to the target URL: <a href="/contacts">' in response.data
 
 
 def test_delete_contact(client, mock_database):
     response = client.get('/delete_contact/1')
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert b'You should be redirected automatically to the target URL: <a href="/contacts">' in response.data

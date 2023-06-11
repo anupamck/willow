@@ -43,8 +43,7 @@ def add_contact():
                 contact_manager = ContactManager(connector)
                 contact_manager.add_contact(name, frequency)
             # Redirect the user back to the contacts page
-            response = make_response(redirect(url_for('contacts.get_contacts')), 201)
-            return response
+            return redirect(url_for('contacts.get_contacts'))
 
 
 @contacts_bp.route('/edit_contact/<int:person_id>', methods=['POST', 'GET'])
@@ -73,7 +72,7 @@ def edit_contact(person_id):
                 contact_manager = ContactManager(connector)
                 contact = contact_manager.get_contact(person_id)
                 return render_template('contactForm.html', contact=contact, form_type='edit')
-        
+
         with DatabaseConnector() as connector:
             contact_manager = ContactManager(connector)
             contact_manager.edit_contact(person_id, name, frequency)
@@ -86,4 +85,4 @@ def delete_contact(person_id):
     with DatabaseConnector() as connector:
         contact_manager = ContactManager(connector)
         contact_manager.delete_contact(person_id)
-    return redirect(url_for('contacts.get_contacts'), 200)
+    return redirect(url_for('contacts.get_contacts'))
