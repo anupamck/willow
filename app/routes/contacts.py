@@ -86,4 +86,4 @@ def delete_contact(person_id):
     with DatabaseConnector() as connector:
         contact_manager = ContactManager(connector)
         contact_manager.delete_contact(person_id)
-    return redirect(url_for('contacts.get_contacts'))
+    return redirect(url_for('contacts.get_contacts'), 200)

@@ -38,17 +38,8 @@ def mock_database(mocker):
                         )
 
     mocker.patch.object(ContactManager,
-                        'add_contact',
-                        return_value=None
-                        )
-
-    mocker.patch.object(ContactManager,
                         'get_contact',
                         return_value=(1, 'Ashoka', 30)
-                        )
-    mocker.patch.object(ContactManager,
-                        'edit_contact',
-                        return_value=None
                         )
 
 
@@ -84,7 +75,7 @@ def test_error_thrown_when_contact_added_without_frequency(client, mock_database
     assert b'Frequency is required' in response.data
 
 
-def test_redirects_to_contact_form_when_contact_added_successfully(client, mock_database):
+def test_redirects_to_contacts_page_when_contact_added_successfully(client, mock_database):
     request_data = {'name': 'Ashoka', 'frequency': '30'}
     response = client.post('/add_contact', data=request_data)
     assert response.status_code == 201
@@ -116,4 +107,5 @@ def test_redirects_to_contact_form_when_contact_edited_successfully(client, mock
 
 def test_delete_contact(client, mock_database):
     response = client.get('/delete_contact/1')
+    assert response.status_code == 200
     assert b'You should be redirected automatically to the target URL: <a href="/contacts">' in response.data
