@@ -36,16 +36,11 @@
         <button type="submit">Save Changes</button>
       </form>
       {% endif %}
-      {% for message in get_flashed_messages() %}
       <div class="flash">
-        <style>
-          .flash {
-            color: red;
-          }
-        </style>
+        {% for message in get_flashed_messages() %}
         {{ message }}
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
   </div>
 </body>

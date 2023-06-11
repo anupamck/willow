@@ -32,16 +32,6 @@
           <label for="notes">Notes:</label>
           <textarea id="notes" name="notes" rows="10" cols="50" required></textarea><br><br>
         </div>
-        {% for message in get_flashed_messages() %}
-        <div class="flash">
-          <style>
-            .flash {
-              color: red;
-            }
-          </style>
-          {{ message }}
-        </div>
-        {% endfor %}
         <button type="submit">Save Changes</button>
       </form>
       {% else %}
@@ -62,6 +52,11 @@
         <button type="submit">Save Changes</button>
       </form>
       {% endif %}
+      <div class="flash">
+        {% for message in get_flashed_messages() %}
+        {{ message }}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </body>
