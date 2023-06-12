@@ -5,10 +5,10 @@ import os
 class DatabaseConnector:
     def __init__(self, config=None):
         self.config = config or {
-            'user': 'u355617091_anupamck',
+            'user': 'u936540649_anupamck',
             'password': os.getenv('DB_PASSWORD'),
-            'host': 'sql1017.main-hosting.eu',
-            'database': 'u355617091_willow'
+            'host': 'srv976.hstgr.io',
+            'database': 'u936540649_willow'
         }
         self.connection = None
 
