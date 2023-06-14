@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 import bcrypt
+import json
 
 
 class DatabaseConnector:
@@ -132,11 +133,15 @@ class UserManager:
     def __init__(self, connector):
         self.connector = connector
 
-    def add_user(self, username, password):
+    def add_user(self, username, password, email, dbConfig):
         salt = bcrypt.gensalt()
         password_enc = bcrypt.hashpw(password.encode('utf-8'), salt)
-        query = 'INSERT INTO users (username, password, salt) VALUES (%s, %s, %s)'
-        params = (username, password_enc, salt)
+        dbPasword_enc = bcrypt.hashpw(
+            dbConfig['password'].encode('utf-8'), salt)
+        dbConfig['password'] = dbPasword_enc.decode('utf-8')
+        dbConfig = json.dumps(dbConfig)
+        query = 'INSERT INTO users (username, password, salt, email, config) VALUES (%s, %s, %s, %s, %s)'
+        params = (username, password_enc, salt, email, dbConfig)
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
