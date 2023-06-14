@@ -2,6 +2,7 @@ from flask import Flask
 from .routes.home import home_bp
 from .routes.contacts import contacts_bp
 from .routes.interactions import interactions_bp
+from .routes.login import login_bp
 from flask_cors import CORS
 
 # Create Flask app
@@ -12,6 +13,7 @@ app.config.from_mapping(
 app.register_blueprint(home_bp)
 app.register_blueprint(contacts_bp)
 app.register_blueprint(interactions_bp)
+app.register_blueprint(login_bp)
 CORS(app)
 
 # Start server
