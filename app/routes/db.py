@@ -1,14 +1,15 @@
 import mysql.connector
 import os
+import bcrypt
 
 
 class DatabaseConnector:
     def __init__(self, config=None):
         self.config = config or {
-            'user': 'u936540649_anupamck',
+            'user': 'u936540649_willowTest',
             'password': os.getenv('DB_PASSWORD'),
             'host': 'srv976.hstgr.io',
-            'database': 'u936540649_willow'
+            'database': 'u936540649_willowTest'
         }
         self.connection = None
 
@@ -122,6 +123,27 @@ class InteractionManager:
     def delete_interaction(self, interaction_id):
         query = 'DELETE FROM interactions WHERE id = %s'
         params = (interaction_id,)
+        with self.connector as cnx:
+            cnx.execute_query(query, params)
+            cnx.connection.commit()
+
+
+class UserManager:
+    def __init__(self, connector):
+        self.connector = connector
+
+    def add_user(self, username, password):
+        salt = bcrypt.gensalt()
+        password_enc = bcrypt.hashpw(password.encode('utf-8'), salt)
+        query = 'INSERT INTO users (username, password, salt) VALUES (%s, %s, %s)'
+        params = (username, password_enc, salt)
+        with self.connector as cnx:
+            cnx.execute_query(query, params)
+            cnx.connection.commit()
+
+    def delete_user(self, username):
+        query = 'DELETE FROM users WHERE username = %s'
+        params = (username,)
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
