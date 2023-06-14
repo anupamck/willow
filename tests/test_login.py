@@ -35,7 +35,7 @@ def test_submitting_incomplete_login_form_flashes_error(client):
     assert b'Username is required.' in response.data
 
 
-def test_submitting_incorrect_username_or_password_flashes_error(client):
+def test_submitting_incorrect_username_flashes_error(client):
     request_data = {'username': 'testUser', 'password': 'testPassword'}
     response = client.post('/login', data=request_data)
     assert response.status_code == 200
