@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { deleteTestContactRows } from '../helper/contacts';
 import { createTestContactRow } from '../helper/contacts';
+import { loginAs } from '../helper/login';
 
 test.beforeEach(async ({ page }) => {
+    await loginAs(page, 'ashoka', process.env.TEST_USER_PASSWORD!)
     await page.goto('./contacts');
 });
 

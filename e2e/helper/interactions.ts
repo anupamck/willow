@@ -9,7 +9,7 @@ export async function deleteTestInteractionRows(page, title) {
             }
         });
         await testInteractionRows.first().getByRole('button', { name: 'Delete' }).click();
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(750);
     }
 }
 

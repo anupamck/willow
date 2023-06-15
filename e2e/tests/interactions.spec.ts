@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { createTestInteractionRow, deleteTestInteractionRows } from '../helper/interactions';
+import { loginAs } from '../helper/login';
 
 test.beforeEach(async ({ page }) => {
+    await loginAs(page, 'ashoka', process.env.TEST_USER_PASSWORD!)
     await page.goto('./contacts');
     await page.getByRole('link', { name: /Interaction test user/ }).click();
 });
