@@ -59,6 +59,10 @@ button {
   cursor: pointer;
 }
 
+button.secondary {
+  background-color: #82818196;
+}
+
 button.delete-button {
   background-color: #f44336;
   float: right;

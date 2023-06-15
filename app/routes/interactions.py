@@ -1,11 +1,13 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for, request
 from ..routes.db import DatabaseConnector, InteractionManager
+from flask_login import login_required
 
 
 interactions_bp = Blueprint('interactions', __name__)
 
 
 @interactions_bp.route('/interactions/<int:person_id>/<string:contact_name>')
+@login_required
 def get_interactions(person_id, contact_name):
     with DatabaseConnector() as connector:
         interaction_manager = InteractionManager(connector)
@@ -20,6 +22,7 @@ def get_interactions(person_id, contact_name):
 
 
 @interactions_bp.route('/add_interaction/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
+@login_required
 def add_interaction(person_id, contact_name):
     if request.method == 'GET':
         return render_template('interactionForm.html', person_id=person_id, contact_name=contact_name, form_type='add')
@@ -52,6 +55,7 @@ def add_interaction(person_id, contact_name):
 
 
 @interactions_bp.route('/edit_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
+@login_required
 def edit_interaction(interaction_id, person_id, contact_name):
     # Fetch interaction info from database to prefill edit form
     if request.method == 'GET':
@@ -92,6 +96,7 @@ def edit_interaction(interaction_id, person_id, contact_name):
 
 
 @interactions_bp.route('/delete_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>')
+@login_required
 def delete_interaction(interaction_id, person_id, contact_name):
     with DatabaseConnector() as connector:
         interaction_manager = InteractionManager(connector)

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <h1>Home</h1>
+  <h1>Home - {{ current_user.username }}</h1>
   <section class="table-container">
     <table aria-label="home-table">
       <thead>
@@ -32,6 +32,7 @@
     </table>
   </section>
   <a href="{{ url_for('contacts.get_contacts') }}"><button>Contacts</button></a>
+  <a href="{{ url_for('auth.logout') }}"><button class="secondary">Logout</button></a>
 </body>
 
 </html>
