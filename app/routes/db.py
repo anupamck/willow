@@ -152,3 +152,37 @@ class UserManager:
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
+
+    def get_users(self):
+        query = 'SELECT username FROM users'
+        with self.connector as cnx:
+            return cnx.execute_query(query)
+
+    def get_user(self, username):
+        query = 'SELECT * FROM users WHERE username = %s'
+        params = (username,)
+        with self.connector as cnx:
+            user_details_array = cnx.execute_query(query, params)
+            if len(user_details_array) == 1:
+                user_details = user_details_array[0]
+                return {
+                    'username': user_details[1],
+                    'password': user_details[2],
+                    'salt': user_details[3],
+                    'email': user_details[4],
+                    'config': json.loads(user_details[5])
+                }
+            elif len(user_details_array) == 0:
+                return None
+            else:
+                raise Exception(
+                    'More than 1 user found with username %s', username)
+
+    def is_password_correct(self, username, password):
+        user = self.get_user(username)
+        if user is None:
+            return False
+        else:
+            password_enc = bcrypt.hashpw(
+                password.encode('utf-8'), user['salt'].encode('utf-8'))
+            return password_enc == user['password'].encode('utf-8')
