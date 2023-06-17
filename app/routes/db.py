@@ -2,16 +2,12 @@ import mysql.connector
 import os
 import bcrypt
 import json
+from cryptography.fernet import Fernet
 
 
 class DatabaseConnector:
     def __init__(self, config=None):
-        self.config = config or {
-            'user': 'u936540649_willowTest',
-            'password': os.getenv('DB_PASSWORD'),
-            'host': 'srv976.hstgr.io',
-            'database': 'u936540649_willowTest'
-        }
+        self.config = config
         self.connection = None
 
     def __enter__(self):
@@ -136,9 +132,9 @@ class UserManager:
     def add_user(self, username, password, email, dbConfig):
         salt = bcrypt.gensalt()
         password_enc = bcrypt.hashpw(password.encode('utf-8'), salt)
-        dbPasword_enc = bcrypt.hashpw(
-            dbConfig['password'].encode('utf-8'), salt)
-        dbConfig['password'] = dbPasword_enc.decode('utf-8')
+        cipher = Fernet(os.getenv('KEY').encode('utf-8'))
+        dbConfig['password'] = cipher.encrypt(
+            password.encode('utf-8')).decode('utf-8')
         dbConfig = json.dumps(dbConfig)
         query = 'INSERT INTO users (username, password, salt, email, config) VALUES (%s, %s, %s, %s, %s)'
         params = (username, password_enc, salt, email, dbConfig)
@@ -152,8 +148,6 @@ class UserManager:
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
-
-    def get_users(self):
         query = 'SELECT username FROM users'
         with self.connector as cnx:
             return cnx.execute_query(query)
@@ -186,3 +180,10 @@ class UserManager:
             password_enc = bcrypt.hashpw(
                 password.encode('utf-8'), user['salt'].encode('utf-8'))
             return password_enc == user['password'].encode('utf-8')
+
+    def get_user_config(self, username):
+        config = self.get_user(username).config
+        cipher = Fernet(os.getenv('KEY').encode('utf-8'))
+        config['password'] = cipher.decrypt(
+            config['password'].encode('utf-8')).decode('utf-8')
+        return config

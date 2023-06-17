@@ -6,6 +6,7 @@ from flask_login import UserMixin, login_user, logout_user, login_required
 import os
 from urllib.parse import urlparse, urljoin
 import datetime
+from cryptography.fernet import Fernet
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -31,8 +32,16 @@ class User(UserMixin):
                 user.username = user_details['username']
                 user.password = user_details['password']
                 user.salt = user_details['salt']
+                user.config = user_details['config']
                 return user
             return None
+
+    @staticmethod
+    def decrypt_config(config):
+        cipher = Fernet(os.getenv('KEY').encode('utf-8'))
+        config['password'] = cipher.decrypt(
+            config['password'].encode('utf-8')).decode('utf-8')
+        return config
 
 
 @auth_bp.route('/', methods=['GET', 'POST'])

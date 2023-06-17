@@ -1,6 +1,10 @@
 from flask import Blueprint, render_template
-from ..routes.db import DatabaseConnector, ContactManager
-from flask_login import login_required
+from ..routes.db import DatabaseConnector, ContactManager, UserManager
+from flask_login import login_required, current_user, logout_user
+from ..routes.auth import User
+from cryptography.fernet import Fernet
+import os
+
 
 home_bp = Blueprint('home', __name__)
 
@@ -8,7 +12,9 @@ home_bp = Blueprint('home', __name__)
 @home_bp.route('/home')
 @login_required
 def get_home():
-    with DatabaseConnector() as connector:
+    user = User.get(current_user.username)
+    config = user.decrypt_config(user.config)
+    with DatabaseConnector(config) as connector:
         contact_manager = ContactManager(connector)
         overdue_contacts = contact_manager.get_overdue_contacts()
         overdue_dicts = []

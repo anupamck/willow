@@ -1,6 +1,7 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for, request
 from ..routes.db import DatabaseConnector, InteractionManager
-from flask_login import login_required
+from flask_login import login_required, current_user
+from ..routes.auth import User
 
 
 interactions_bp = Blueprint('interactions', __name__)
@@ -9,7 +10,9 @@ interactions_bp = Blueprint('interactions', __name__)
 @interactions_bp.route('/interactions/<int:person_id>/<string:contact_name>')
 @login_required
 def get_interactions(person_id, contact_name):
-    with DatabaseConnector() as connector:
+    user = User.get(current_user.username)
+    config = user.decrypt_config(user.config)
+    with DatabaseConnector(config) as connector:
         interaction_manager = InteractionManager(connector)
         interactions = interaction_manager.get_interactions(person_id)
     # Convert the list of lists to a list of dictionaries
@@ -46,8 +49,10 @@ def add_interaction(person_id, contact_name):
             return render_template('interactionForm.html', person_id=person_id, contact_name=contact_name, form_type='add')
 
         else:
+            user = User.get(current_user.username)
+            config = user.decrypt_config(user.config)
             # Add the interaction to the database
-            with DatabaseConnector() as connector:
+            with DatabaseConnector(config) as connector:
                 interaction_manager = InteractionManager(connector)
                 interaction_manager.add_interaction(
                     person_id, date, title, notes)
@@ -57,9 +62,11 @@ def add_interaction(person_id, contact_name):
 @interactions_bp.route('/edit_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
 @login_required
 def edit_interaction(interaction_id, person_id, contact_name):
+    user = User.get(current_user.username)
+    config = user.decrypt_config(user.config)
     # Fetch interaction info from database to prefill edit form
     if request.method == 'GET':
-        with DatabaseConnector() as connector:
+        with DatabaseConnector(config) as connector:
             interaction_manager = InteractionManager(connector)
             interaction = interaction_manager.get_interaction(interaction_id)
         return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id, form_type='edit')
@@ -81,14 +88,14 @@ def edit_interaction(interaction_id, person_id, contact_name):
 
         if error is not None:
             flash(error)
-            with DatabaseConnector() as connector:
+            with DatabaseConnector(config) as connector:
                 interaction_manager = InteractionManager(connector)
                 interaction = interaction_manager.get_interaction(
                     interaction_id)
                 return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id, form_type='edit')
 
     # Update the interaction in the database
-    with DatabaseConnector() as connector:
+    with DatabaseConnector(config) as connector:
         interaction_manager = InteractionManager(connector)
         interaction_manager.edit_interaction(
             interaction_id, date, title, notes)
@@ -98,7 +105,9 @@ def edit_interaction(interaction_id, person_id, contact_name):
 @interactions_bp.route('/delete_interaction/<int:interaction_id>/<int:person_id>/<string:contact_name>')
 @login_required
 def delete_interaction(interaction_id, person_id, contact_name):
-    with DatabaseConnector() as connector:
+    user = User.get(current_user.username)
+    config = user.decrypt_config(user.config)
+    with DatabaseConnector(config) as connector:
         interaction_manager = InteractionManager(connector)
         interaction_manager.delete_interaction(interaction_id)
     return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))
