@@ -2,8 +2,9 @@ from flask import Flask
 from ..app.routes.auth import auth_bp
 from ..app.routes.home import home_bp
 from ..app.routes.contacts import contacts_bp
+from ..app.routes.interactions import interactions_bp
 import pytest
-from ..app.routes.db import UserManager
+from ..app.routes.db import UserManager, ContactManager
 import bcrypt
 from flask_login import LoginManager
 from ..app.routes.auth import User
@@ -15,6 +16,7 @@ def app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(contacts_bp)
+    app.register_blueprint(interactions_bp)
     app.config['TESTING'] = True
     app.secret_key = 'test'
 
@@ -39,24 +41,38 @@ def client(app):
 
 
 @pytest.fixture
-def mock_database(mocker):
+def mock_user_details(mocker):
     mocker.patch('mysql.connector.connect')
+
+    # prepare mock responses
     salt = '$2b$12$VUEfecQgohf4CKkB2loTKO'
     password_hashed = bcrypt.hashpw(
         "testPassword".encode('utf-8'), salt.encode('utf-8')).decode('utf-8')
-    user_details = {
+
+    user_details_ashoka = {
         'username': 'ashoka',
         'password': password_hashed,
         'salt': salt,
         'email': 'ashoka@maghada.com',
-        'config': {"user": "u936540649_willowTest", "password": "$2b$12$QGyilzNz6OP8ugyW4EtW9OBQzfOfa6X8k1SWTaXdhLQOeqC9rfyQa",
-                   "host": "srv976.hstgr.io", "database": "u936540649_willowTest"}
+        'config': {"user": "u936540649_willowAshoka", "password": "$2b$12$QGyilzNz6OP8ugyW4EtW9OBQzfOfa6X8k1SWTaXdhLQOeqC9rfyQa",
+                   "host": "srv976.hstgr.io", "database": "u936540649_willowAshoka"}
+    }
+
+    user_details_bimbisara = {
+        'username': 'bimbisara',
+        'password': password_hashed,
+        'salt': salt,
+        'email': 'bimbisara@maghada.com',
+        'config': {"user": "u936540649_willowBimbisara", "password": "$2b$12$QGyilzNz6OP8ugyW4EtW9OBQzfOfa6X8k1SWTaXdhLQOeqC9rfyQa",
+                    "host": "srv976.hstgr.io", "database": "u936540649_willowBimbisara"}
     }
 
     # Define the side_effect function
     def side_effect(username):
         if username == "ashoka":
-            return user_details
+            return user_details_ashoka
+        elif username == "bimbisara":
+            return user_details_bimbisara
         else:
             return None
 
@@ -64,14 +80,29 @@ def mock_database(mocker):
     mocker.patch.object(UserManager, 'get_user', side_effect=side_effect)
 
 
+@pytest.fixture
+def mock_overdue_contacts(mocker):
+   # Patch the entire mysql.connector module to mock database interactions
+    mocker.patch('mysql.connector.connect')
+
+    # Mock the return value of the get_overdue_contacts method
+    database_response = [
+        (1, 'Mahendra', 30, '2023-01-01'),
+        (2, 'Pushyamitra', 25, '2022-01-01'),
+    ]
+
+    mocker.patch.object(ContactManager, 'get_overdue_contacts',
+                        return_value=database_response)
+
+
+@pytest.fixture
 def test_login_template_is_rendered(client):
     response = client.get('/')
     assert response.status_code == 200
-    print(response.data)
     assert b'<h1>Login</h1>' in response.data
     assert b'<form action="/" method="POST">' in response.data
-    assert b'<input type="text" name="username" required>' in response.data
-    assert b'<input type="password" name="password" required>' in response.data
+    assert b'<label for="username">Username:</label>' in response.data
+    assert b'<label for="password">Password:</label>' in response.data
 
 
 def test_submitting_incomplete_login_form_flashes_error(client):
@@ -82,7 +113,7 @@ def test_submitting_incomplete_login_form_flashes_error(client):
     assert b'Username is required.' in response.data
 
 
-def test_submitting_incorrect_username_flashes_error(client, mock_database):
+def test_submitting_incorrect_username_flashes_error(client, mock_user_details):
     request_data = {'username': 'testUser', 'password': 'testPassword'}
     response = client.post('/', data=request_data)
     assert response.status_code == 200
@@ -90,14 +121,16 @@ def test_submitting_incorrect_username_flashes_error(client, mock_database):
     assert b'Incorrect username or password.' in response.data
 
 
-@pytest.mark.todo
-def test_submitting_incorrect_password_flashes_error(client, mock_database):
-    pass
+def test_submitting_incorrect_password_flashes_error(client, mock_user_details):
+    request_data = {'username': 'ashoka', 'password': 'wrongPassword'}
+    response = client.post('/', data=request_data)
+    assert response.status_code == 200
+    assert b'<h1>Login</h1>' in response.data
+    assert b'Incorrect username or password.' in response.data
 
 
-def test_submitting_correct_username_and_password_redirects_user_to_home(client, mock_database):
+def test_submitting_correct_username_and_password_redirects_user_to_home(client, mock_user_details, mock_overdue_contacts):
     request_data = {'username': 'ashoka', 'password': 'testPassword'}
     response = client.post('/', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    print(response.data)
     assert b'<h1>Home - ashoka</h1>' in response.data
