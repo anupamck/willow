@@ -129,17 +129,39 @@ class UserManager:
     def __init__(self, connector):
         self.connector = connector
 
-    def add_user(self, username, password, email, dbConfig):
+    def add_user(self, username, password, email, dbPassword, dbConfig):
         salt = bcrypt.gensalt()
         password_enc = bcrypt.hashpw(password.encode('utf-8'), salt)
         cipher = Fernet(os.getenv('KEY').encode('utf-8'))
         dbConfig['password'] = cipher.encrypt(
-            password.encode('utf-8')).decode('utf-8')
+            dbPassword.encode('utf-8')).decode('utf-8')
         dbConfig = json.dumps(dbConfig)
         query = 'INSERT INTO users (username, password, salt, email, config) VALUES (%s, %s, %s, %s, %s)'
         params = (username, password_enc, salt, email, dbConfig)
         with self.connector as cnx:
             cnx.execute_query(query, params)
+            cnx.connection.commit()
+
+    def initialize_user(self):
+        query_interactions_table = '''
+        CREATE TABLE IF NOT EXISTS interactions (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            person_id INTEGER,
+            date DATE,
+            title TEXT,
+            notes TEXT
+        );
+        '''
+        query_contacts_table = '''
+        CREATE TABLE IF NOT EXISTS contacts (
+            id INTEGER AUTO_INCREMENT PRIMARY KEY,
+            name TEXT,
+            frequency INT
+        );
+        '''
+        with self.connector as cnx:
+            cnx.execute_query(query_interactions_table)
+            cnx.execute_query(query_contacts_table)
             cnx.connection.commit()
 
     def delete_user(self, username):
