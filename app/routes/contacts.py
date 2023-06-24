@@ -11,7 +11,7 @@ contacts_bp = Blueprint('contacts', __name__)
 @login_required
 def get_contacts():
     user = User.get(current_user.username)
-    with DatabaseConnector(config=user.config) as connector:
+    with DatabaseConnector(database=user.database) as connector:
         contact_manager = ContactManager(connector)
         contacts = contact_manager.get_contacts()
         contact_dicts = []
@@ -45,7 +45,7 @@ def add_contact():
             return render_template('contactForm.html', form_type='add')
 
         else:
-            with DatabaseConnector(user.config) as connector:
+            with DatabaseConnector(user.database) as connector:
                 contact_manager = ContactManager(connector)
                 contact_manager.add_contact(name, frequency)
             # Redirect the user back to the contacts page
@@ -57,7 +57,7 @@ def add_contact():
 def edit_contact(person_id):
     user = User.get(current_user.username)
     if request.method == 'GET':
-        with DatabaseConnector(user.config) as connector:
+        with DatabaseConnector(user.database) as connector:
             contact_manager = ContactManager(connector)
             contact = contact_manager.get_contact(person_id)
         # Render the form
@@ -76,12 +76,12 @@ def edit_contact(person_id):
 
         if error is not None:
             flash(error)
-            with DatabaseConnector(user.config) as connector:
+            with DatabaseConnector(user.database) as connector:
                 contact_manager = ContactManager(connector)
                 contact = contact_manager.get_contact(person_id)
                 return render_template('contactForm.html', contact=contact, form_type='edit')
 
-        with DatabaseConnector(user.config) as connector:
+        with DatabaseConnector(user.database) as connector:
             contact_manager = ContactManager(connector)
             contact_manager.edit_contact(person_id, name, frequency)
         # Redirect the user back to the contacts page
@@ -92,7 +92,7 @@ def edit_contact(person_id):
 @login_required
 def delete_contact(person_id):
     user = User.get(current_user.username)
-    with DatabaseConnector(user.config) as connector:
+    with DatabaseConnector(user.database) as connector:
         contact_manager = ContactManager(connector)
         contact_manager.delete_contact(person_id)
     return redirect(url_for('contacts.get_contacts'))

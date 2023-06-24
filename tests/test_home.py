@@ -68,7 +68,7 @@ def mock_database(mocker):
 
     user = User('ashoka')
     user.username = 'ashoka'
-    user.config = {"database": "ashoka.db"}
+    user.database = "ashoka.db"
 
     mocker.patch.object(ContactManager,
                         'get_overdue_contacts',

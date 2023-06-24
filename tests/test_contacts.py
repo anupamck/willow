@@ -67,7 +67,7 @@ def mock_database(mocker):
 
     user = User('ashoka')
     user.username = 'ashoka'
-    user.config = {"database": "ashoka.db"}
+    user.database = "ashoka.db"
 
     mocker.patch.object(ContactManager,
                         'get_contacts',
@@ -109,7 +109,6 @@ def test_contacts_are_rendered(authenticated_client, mock_database):
 def test_add_contact_form_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/add_contact')
     assert response.status_code == 200
-    print(response.data)
     assert b'<title>Willow - Contact Form</title>' in response.data
     assert b'Add Contact' in response.data
     assert b'<input type="text" id="name" name="name" value="" required>' in response.data

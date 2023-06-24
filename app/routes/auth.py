@@ -13,9 +13,7 @@ load_dotenv()
 
 auth_bp = Blueprint('auth', __name__)
 
-config_users_db = {
-    'database': os.path.join(os.getenv('DB_PATH'), "users.db")
-}
+users_db = os.path.join(os.getenv('DB_PATH'), "users.db")
 
 
 class User(UserMixin):
@@ -24,7 +22,7 @@ class User(UserMixin):
 
     @staticmethod
     def get(username):
-        with DatabaseConnector(config=config_users_db) as connector:
+        with DatabaseConnector(database=users_db) as connector:
             user_manager = UserManager(connector)
             user_details = user_manager.get_user(username)
             if user_details is not None:
@@ -32,7 +30,7 @@ class User(UserMixin):
                 user.username = user_details['username']
                 user.password = user_details['password']
                 user.salt = user_details['salt']
-                user.config = user_details['config']
+                user.database = user_details['database']
                 return user
             return None
 
@@ -59,7 +57,7 @@ def login():
             flash(error)
             return render_template('login.html')
 
-        with DatabaseConnector(config=config_users_db) as connector:
+        with DatabaseConnector(database=users_db) as connector:
             user_manager = UserManager(connector)
             user = User.get(username)
             if user is None:

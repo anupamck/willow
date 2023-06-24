@@ -70,7 +70,7 @@ def mock_database(mocker):
 
     user = User('ashoka')
     user.username = 'ashoka'
-    user.config = {"database": "ashoka.db"}
+    user.database = "ashoka.db"
 
     mocker.patch.object(InteractionManager,
                         'get_interactions',
@@ -120,7 +120,6 @@ def test_interactions_are_rendered(authenticated_client, mock_database):
 def test_add_interaction_form_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/interactions/1/Ashoka')
     assert response.status_code == 200
-    print(response.data)
     assert b'<h1>Interactions - Ashoka</h1>' in response.data
     assert b'The battle of Kalinga' in response.data
     assert b'I repent everything so much' in response.data
@@ -134,7 +133,6 @@ def test_error_thrown_when_incomplete_interaction_added(authenticated_client, mo
     response = authenticated_client.post(
         '/add_interaction/1/Ashoka', data=request_data)
     assert response.status_code == 200
-    print(response.data)
     assert b'Title and notes are required' in response.data
 
 
@@ -150,7 +148,6 @@ def test_redirects_to_interactions_page_when_interaction_added_successfully(auth
 def test_edit_interaction_form_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/edit_interaction/1/1/Ashoka')
     assert response.status_code == 200
-    print(response.data)
     assert b'Edit Interaction' in response.data
     assert b'<input type="date" id="date" name="date" value="2023-06-08" required>' in response.data
     assert b'<input type="text" id="title" name="title" value="The battle of Kalinga" required>' in response.data
@@ -164,7 +161,6 @@ def test_error_thrown_when_interaction_edited_without_title(authenticated_client
     response = authenticated_client.post(
         '/edit_interaction/1/1/Ashoka', data=request_data)
     assert response.status_code == 200
-    print(response.data)
     assert b'Title and notes are required.' in response.data
 
 

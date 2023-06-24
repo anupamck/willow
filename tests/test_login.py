@@ -54,7 +54,7 @@ def mock_user_details(mocker):
         'password': password_hashed,
         'salt': salt,
         'email': 'ashoka@maghada.com',
-        'config': {"database": "ashoka.db"}
+        'database': "ashoka.db"
     }
 
     user_details_bimbisara = {
@@ -62,8 +62,7 @@ def mock_user_details(mocker):
         'password': password_hashed,
         'salt': salt,
         'email': 'bimbisara@maghada.com',
-        'config': {"user": "u936540649_willowBimbisara", "password": "$2b$12$QGyilzNz6OP8ugyW4EtW9OBQzfOfa6X8k1SWTaXdhLQOeqC9rfyQa",
-                    "host": "srv976.hstgr.io", "database": "u936540649_willowBimbisara"}
+        'database': "bimbisara.db"
     }
 
     # Define the side_effect function

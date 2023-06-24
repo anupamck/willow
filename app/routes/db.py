@@ -6,8 +6,8 @@ from cryptography.fernet import Fernet
 
 
 class DatabaseConnector:
-    def __init__(self, config=None):
-        self.config = config
+    def __init__(self, database=None):
+        self.database = database
         self.connection = None
 
     def __enter__(self):
@@ -18,7 +18,7 @@ class DatabaseConnector:
         self.close()
 
     def connect(self):
-        self.connection = sqlite3.connect(self.config['database'])
+        self.connection = sqlite3.connect(self.database)
 
     def close(self):
         if self.connection:
@@ -133,12 +133,11 @@ class UserManager:
     def __init__(self, connector):
         self.connector = connector
 
-    def add_user(self, username, password, email, dbConfig):
+    def add_user(self, username, password, email, database):
         salt = bcrypt.gensalt()
         password_enc = bcrypt.hashpw(password.encode('utf-8'), salt)
-        dbConfig = json.dumps(dbConfig)
-        query = 'INSERT INTO users (username, password, salt, email, config) VALUES (?, ?, ?, ?, ?)'
-        params = (username, password_enc, salt, email, dbConfig)
+        query = 'INSERT INTO users (username, password, salt, email, database) VALUES (?, ?, ?, ?, ?)'
+        params = (username, password_enc, salt, email, database)
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
@@ -187,7 +186,7 @@ class UserManager:
                     'password': user_details[2],
                     'salt': user_details[3],
                     'email': user_details[4],
-                    'config': {'database': os.path.join(os.getenv('DB_PATH'), json.loads(user_details[5])['database'])}
+                    'database': os.path.join(os.getenv('DB_PATH'), user_details[5])
                 }
             elif len(user_details_array) == 0:
                 return None
@@ -203,10 +202,3 @@ class UserManager:
             password_enc = bcrypt.hashpw(
                 password.encode('utf-8'), user['salt'].encode('utf-8'))
             return password_enc == user['password'].encode('utf-8')
-
-    def get_user_config(self, username):
-        config = self.get_user(username).config
-        cipher = Fernet(os.getenv('KEY').encode('utf-8'))
-        config['password'] = cipher.decrypt(
-            config['password'].encode('utf-8')).decode('utf-8')
-        return config
