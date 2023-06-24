@@ -13,8 +13,8 @@ home_bp = Blueprint('home', __name__)
 @login_required
 def get_home():
     user = User.get(current_user.username)
-    config = user.decrypt_config(user.config)
-    with DatabaseConnector(config) as connector:
+    print(user.config)
+    with DatabaseConnector(user.config) as connector:
         contact_manager = ContactManager(connector)
         overdue_contacts = contact_manager.get_overdue_contacts()
         overdue_dicts = []

@@ -42,7 +42,7 @@ def client(app):
 
 @pytest.fixture
 def mock_user_details(mocker):
-    mocker.patch('mysql.connector.connect')
+    mocker.patch('sqlite3.connect')
 
     # prepare mock responses
     salt = '$2b$12$VUEfecQgohf4CKkB2loTKO'
@@ -54,8 +54,7 @@ def mock_user_details(mocker):
         'password': password_hashed,
         'salt': salt,
         'email': 'ashoka@maghada.com',
-        'config': {"user": "u936540649_willowAshoka", "password": "$2b$12$QGyilzNz6OP8ugyW4EtW9OBQzfOfa6X8k1SWTaXdhLQOeqC9rfyQa",
-                   "host": "srv976.hstgr.io", "database": "u936540649_willowAshoka"}
+        'config': {"database": "ashoka.db"}
     }
 
     user_details_bimbisara = {
@@ -82,8 +81,7 @@ def mock_user_details(mocker):
 
 @pytest.fixture
 def mock_overdue_contacts(mocker):
-   # Patch the entire mysql.connector module to mock database interactions
-    mocker.patch('mysql.connector.connect')
+    mocker.patch('sqlite3.connect')
 
     # Mock the return value of the get_overdue_contacts method
     database_response = [

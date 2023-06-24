@@ -1,4 +1,4 @@
-import mysql.connector
+import sqlite3
 import os
 import bcrypt
 import json
@@ -18,15 +18,19 @@ class DatabaseConnector:
         self.close()
 
     def connect(self):
-        self.connection = mysql.connector.connect(**self.config)
+        self.connection = sqlite3.connect(self.config['database'])
 
     def close(self):
         if self.connection:
             self.connection.close()
 
     def execute_query(self, query, params=None):
-        with self.connection.cursor() as cursor:
-            cursor.execute(query, params)
+        with self.connection:
+            cursor = self.connection.cursor()
+            if params:
+                cursor.execute(query, params)
+            else:
+                cursor.execute(query)
             result = cursor.fetchall()
         return result
 
@@ -36,11 +40,11 @@ class ContactManager:
         self.connector = connector
 
     def get_overdue_contacts(self):
-        query = '''SELECT c.id, c.name, c.frequency, max(i.date) as last_interaction
+        query = '''SELECT c.id, c.name, c.frequency, MAX(i.date) AS last_interaction
                     FROM contacts c
                     LEFT JOIN interactions i ON i.person_id = c.id
                     GROUP BY c.id, c.name, c.frequency
-                    HAVING (DATEDIFF(NOW(), max(i.date))) 
+                    HAVING (JULIANDAY('now') - JULIANDAY(MAX(i.date))) 
                     >= c.frequency AND c.frequency > 0
                     ORDER BY c.frequency ASC;'''
         with self.connector as cnx:
@@ -52,7 +56,7 @@ class ContactManager:
             return cnx.execute_query(query)
 
     def get_contact(self, person_id):
-        query = '''SELECT id, name, frequency FROM contacts WHERE id = %s'''
+        query = '''SELECT id, name, frequency FROM contacts WHERE id = ?'''
         params = (person_id,)
         with self.connector as cnx:
             contact_array = cnx.execute_query(query, params)
@@ -62,21 +66,21 @@ class ContactManager:
                 raise Exception('Contact not found')
 
     def add_contact(self, name, frequency):
-        query = 'INSERT INTO contacts (name, frequency) VALUES (%s, %s)'
+        query = 'INSERT INTO contacts (name, frequency) VALUES (?, ?)'
         params = (name, frequency)
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
 
     def edit_contact(self, person_id, name, frequency):
-        query = 'UPDATE contacts SET name = %s, frequency = %s WHERE id = %s'
+        query = 'UPDATE contacts SET name = ?, frequency = ? WHERE id = ?'
         params = (name, frequency, person_id)
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
 
     def delete_contact(self, person_id):
-        query = 'DELETE FROM contacts WHERE id = %s'
+        query = 'DELETE FROM contacts WHERE id = ?'
         params = (person_id,)
         with self.connector as cnx:
             cnx.execute_query(query, params)
@@ -88,13 +92,13 @@ class InteractionManager:
         self.connector = connector
 
     def get_interactions(self, person_id):
-        query = '''SELECT id, date, title, notes FROM interactions WHERE person_id = %s ORDER BY date DESC'''
+        query = '''SELECT id, date, title, notes FROM interactions WHERE person_id = ? ORDER BY date DESC'''
         params = (person_id,)
         with self.connector as cnx:
             return cnx.execute_query(query, params)
 
     def get_interaction(self, interaction_id):
-        query = '''SELECT id, date, title, notes FROM interactions WHERE id = %s'''
+        query = '''SELECT id, date, title, notes FROM interactions WHERE id = ?'''
         params = (interaction_id,)
         with self.connector as cnx:
             interaction_array = cnx.execute_query(query, params)
@@ -104,21 +108,21 @@ class InteractionManager:
                 raise Exception('Interaction not found')
 
     def add_interaction(self, person_id, date, title, notes):
-        query = 'INSERT INTO interactions (person_id, date, title, notes) VALUES (%s, %s, %s, %s)'
+        query = 'INSERT INTO interactions (person_id, date, title, notes) VALUES (?, ?, ?, ?)'
         params = (person_id, date, title, notes)
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
 
     def edit_interaction(self, interaction_id, date, title, notes):
-        query = 'UPDATE interactions SET date = %s, title = %s, notes = %s WHERE id = %s'
+        query = 'UPDATE interactions SET date = ?, title = ?, notes = ? WHERE id = ?'
         params = (date, title, notes, interaction_id)
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
 
     def delete_interaction(self, interaction_id):
-        query = 'DELETE FROM interactions WHERE id = %s'
+        query = 'DELETE FROM interactions WHERE id = ?'
         params = (interaction_id,)
         with self.connector as cnx:
             cnx.execute_query(query, params)
@@ -129,14 +133,11 @@ class UserManager:
     def __init__(self, connector):
         self.connector = connector
 
-    def add_user(self, username, password, email, dbPassword, dbConfig):
+    def add_user(self, username, password, email, dbConfig):
         salt = bcrypt.gensalt()
         password_enc = bcrypt.hashpw(password.encode('utf-8'), salt)
-        cipher = Fernet(os.getenv('KEY').encode('utf-8'))
-        dbConfig['password'] = cipher.encrypt(
-            dbPassword.encode('utf-8')).decode('utf-8')
         dbConfig = json.dumps(dbConfig)
-        query = 'INSERT INTO users (username, password, salt, email, config) VALUES (%s, %s, %s, %s, %s)'
+        query = 'INSERT INTO users (username, password, salt, email, config) VALUES (?, ?, ?, ?, ?)'
         params = (username, password_enc, salt, email, dbConfig)
         with self.connector as cnx:
             cnx.execute_query(query, params)
@@ -165,7 +166,7 @@ class UserManager:
             cnx.connection.commit()
 
     def delete_user(self, username):
-        query = 'DELETE FROM users WHERE username = %s'
+        query = 'DELETE FROM users WHERE username = ?'
         params = (username,)
         with self.connector as cnx:
             cnx.execute_query(query, params)
@@ -175,7 +176,7 @@ class UserManager:
             return cnx.execute_query(query)
 
     def get_user(self, username):
-        query = 'SELECT * FROM users WHERE username = %s'
+        query = 'SELECT * FROM users WHERE username = ?'
         params = (username,)
         with self.connector as cnx:
             user_details_array = cnx.execute_query(query, params)
@@ -186,13 +187,13 @@ class UserManager:
                     'password': user_details[2],
                     'salt': user_details[3],
                     'email': user_details[4],
-                    'config': json.loads(user_details[5])
+                    'config': {'database': os.path.join(os.getenv('DB_PATH'), json.loads(user_details[5])['database'])}
                 }
             elif len(user_details_array) == 0:
                 return None
             else:
                 raise Exception(
-                    'More than 1 user found with username %s', username)
+                    'More than 1 user found with username ?', username)
 
     def is_password_correct(self, username, password):
         user = self.get_user(username)

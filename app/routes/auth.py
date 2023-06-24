@@ -7,14 +7,14 @@ import os
 from urllib.parse import urlparse, urljoin
 import datetime
 from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+
+load_dotenv()
 
 auth_bp = Blueprint('auth', __name__)
 
 config_users_db = {
-    'user': 'u936540649_willowUsers',
-            'password': os.getenv('USER_DB_PASSWORD'),
-            'host': 'srv976.hstgr.io',
-            'database': 'u936540649_willowUsers'
+    'database': os.path.join(os.getenv('DB_PATH'), "users.db")
 }
 
 
@@ -35,13 +35,6 @@ class User(UserMixin):
                 user.config = user_details['config']
                 return user
             return None
-
-    @staticmethod
-    def decrypt_config(config):
-        cipher = Fernet(os.getenv('KEY').encode('utf-8'))
-        config['password'] = cipher.decrypt(
-            config['password'].encode('utf-8')).decode('utf-8')
-        return config
 
 
 @auth_bp.route('/', methods=['GET', 'POST'])

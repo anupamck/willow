@@ -11,8 +11,8 @@ interactions_bp = Blueprint('interactions', __name__)
 @login_required
 def get_interactions(person_id, contact_name):
     user = User.get(current_user.username)
-    config = user.decrypt_config(user.config)
-    with DatabaseConnector(config) as connector:
+    print(user.config)
+    with DatabaseConnector(config=user.config) as connector:
         interaction_manager = InteractionManager(connector)
         interactions = interaction_manager.get_interactions(person_id)
     # Convert the list of lists to a list of dictionaries
@@ -50,9 +50,8 @@ def add_interaction(person_id, contact_name):
 
         else:
             user = User.get(current_user.username)
-            config = user.decrypt_config(user.config)
             # Add the interaction to the database
-            with DatabaseConnector(config) as connector:
+            with DatabaseConnector(user.config) as connector:
                 interaction_manager = InteractionManager(connector)
                 interaction_manager.add_interaction(
                     person_id, date, title, notes)
@@ -63,10 +62,9 @@ def add_interaction(person_id, contact_name):
 @login_required
 def edit_interaction(interaction_id, person_id, contact_name):
     user = User.get(current_user.username)
-    config = user.decrypt_config(user.config)
     # Fetch interaction info from database to prefill edit form
     if request.method == 'GET':
-        with DatabaseConnector(config) as connector:
+        with DatabaseConnector(user.config) as connector:
             interaction_manager = InteractionManager(connector)
             interaction = interaction_manager.get_interaction(interaction_id)
         return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id, form_type='edit')
@@ -88,14 +86,14 @@ def edit_interaction(interaction_id, person_id, contact_name):
 
         if error is not None:
             flash(error)
-            with DatabaseConnector(config) as connector:
+            with DatabaseConnector(user.config) as connector:
                 interaction_manager = InteractionManager(connector)
                 interaction = interaction_manager.get_interaction(
                     interaction_id)
                 return render_template('interactionForm.html', interaction=interaction, contact_name=contact_name, person_id=person_id, form_type='edit')
 
     # Update the interaction in the database
-    with DatabaseConnector(config) as connector:
+    with DatabaseConnector(user.config) as connector:
         interaction_manager = InteractionManager(connector)
         interaction_manager.edit_interaction(
             interaction_id, date, title, notes)
@@ -106,8 +104,7 @@ def edit_interaction(interaction_id, person_id, contact_name):
 @login_required
 def delete_interaction(interaction_id, person_id, contact_name):
     user = User.get(current_user.username)
-    config = user.decrypt_config(user.config)
-    with DatabaseConnector(config) as connector:
+    with DatabaseConnector(user.config) as connector:
         interaction_manager = InteractionManager(connector)
         interaction_manager.delete_interaction(interaction_id)
     return redirect(url_for('interactions.get_interactions', person_id=person_id, contact_name=contact_name))

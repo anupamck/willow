@@ -59,7 +59,7 @@ def authenticated_client(client):
 @pytest.fixture
 def mock_database(mocker):
    # Patch the entire mysql.connector module to mock database interactions
-    mocker.patch('mysql.connector.connect')
+    mocker.patch('sqlite3.connect')
 
     # Mock the return value of the get_overdue_contacts method
     database_response = [
@@ -67,6 +67,11 @@ def mock_database(mocker):
         (2, "2023-07-08", "I'll build 80,000 Stupas",
          "So that I am not born better than a lizard in my next life"),
     ]
+
+    user = User('ashoka')
+    user.username = 'ashoka'
+    user.config = {"database": "ashoka.db"}
+
     mocker.patch.object(InteractionManager,
                         'get_interactions',
                         return_value=database_response
@@ -76,6 +81,11 @@ def mock_database(mocker):
                         'get_interaction',
                         return_value=(
                             1, "2023-06-08", "The battle of Kalinga", "I repent everything so much")
+                        )
+
+    mocker.patch.object(User,
+                        'get',
+                        return_value=user
                         )
 
 
