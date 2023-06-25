@@ -2,7 +2,7 @@ from flask import Blueprint, request, flash, render_template, redirect, url_for,
 from ..routes.db import DatabaseConnector, InteractionManager
 from flask_login import login_required, current_user
 from ..routes.auth import User
-
+import datetime
 
 interactions_bp = Blueprint('interactions', __name__)
 
@@ -26,8 +26,10 @@ def get_interactions(person_id, contact_name):
 @interactions_bp.route('/add_interaction/<int:person_id>/<string:contact_name>', methods=['POST', 'GET'])
 @login_required
 def add_interaction(person_id, contact_name):
+    # Format today's date as 'YYYY-MM-DD'
+    today = datetime.date.today().strftime("%Y-%m-%d")
     if request.method == 'GET':
-        return render_template('interactionForm.html', person_id=person_id, contact_name=contact_name, form_type='add')
+        return render_template('interactionForm.html', today=today, person_id=person_id, contact_name=contact_name, form_type='add')
 
     elif request.method == 'POST':
         # Get the form data

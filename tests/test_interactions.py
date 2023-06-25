@@ -9,6 +9,7 @@ import html
 from flask_login import LoginManager
 from ..app.routes.auth import User
 from flask_login import login_user, logout_user
+import datetime
 
 
 @pytest.fixture
@@ -179,3 +180,12 @@ def test_delete_interaction(authenticated_client, mock_database):
     response = authenticated_client.get('/delete_interaction/1/1/Ashoka')
     assert response.status_code == 302
     assert b'You should be redirected automatically to the target URL: <a href="/interactions/1/Ashoka">' in response.data
+
+
+def test_add_interaction_is_prefilled_with_todays_date(authenticated_client, mock_database):
+    response = authenticated_client.get('/add_interaction/1/Ashoka')
+    assert response.status_code == 200
+    print(response.data)
+    today = datetime.date.today().strftime("%Y-%m-%d")
+    date_field = f'<input type="date" id="date" name="date" value="{today}" required>'
+    assert date_field.encode() in response.data
