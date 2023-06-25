@@ -125,9 +125,10 @@ def test_error_thrown_when_contact_added_without_frequency(authenticated_client,
 
 def test_redirects_to_contacts_page_when_contact_added_successfully(authenticated_client, mock_database):
     request_data = {'name': 'Ashoka', 'frequency': '30'}
-    response = authenticated_client.post('/add_contact', data=request_data)
-    assert response.status_code == 302
-    assert b'You should be redirected automatically to the target URL: <a href="/contacts">' in response.data
+    response = authenticated_client.post(
+        '/add_contact', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h1>My Contacts</h1>' in response.data
 
 
 def test_edit_contact_form_is_rendered(authenticated_client, mock_database):
@@ -149,12 +150,14 @@ def test_error_thrown_when_contact_edited_without_frequency(authenticated_client
 
 def test_redirects_to_contact_form_when_contact_edited_successfully(authenticated_client, mock_database):
     request_data = {'name': 'Ashoka', 'frequency': '30'}
-    response = authenticated_client.post('/edit_contact/1', data=request_data)
-    assert response.status_code == 302
-    assert b'You should be redirected automatically to the target URL: <a href="/contacts">' in response.data
+    response = authenticated_client.post(
+        '/edit_contact/1', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h1>My Contacts</h1>' in response.data
 
 
 def test_delete_contact(authenticated_client, mock_database):
-    response = authenticated_client.get('/delete_contact/1')
-    assert response.status_code == 302
-    assert b'You should be redirected automatically to the target URL: <a href="/contacts">' in response.data
+    response = authenticated_client.get(
+        '/delete_contact/1', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h1>My Contacts</h1>' in response.data

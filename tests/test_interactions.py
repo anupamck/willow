@@ -69,6 +69,13 @@ def mock_database(mocker):
          "So that I am not born better than a lizard in my next life"),
     ]
 
+    database_response_edited = [
+        (1, "2023-06-08", "The battle of Kalinga",
+         "I repent everything so much. All those lives can never be gotten back again."),
+        (2, "2023-07-08", "I'll build 80,000 Stupas",
+         "So that I am not born better than a lizard in my next life"),
+    ]
+
     user = User('ashoka')
     user.username = 'ashoka'
     user.database = "ashoka.db"
@@ -141,9 +148,9 @@ def test_redirects_to_interactions_page_when_interaction_added_successfully(auth
     request_data = {'date': '2023-06-08',
                     'title': 'The battle of Kalinga', 'notes': 'I repent everything so much', 'person_id': '1', 'contact_name': 'Ashoka'}
     response = authenticated_client.post(
-        '/add_interaction/1/Ashoka', data=request_data)
-    assert response.status_code == 302
-    assert b'You should be redirected automatically to the target URL: <a href="/interactions/1/Ashoka">' in response.data
+        '/add_interaction/1/Ashoka', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h1>Interactions - Ashoka</h1>' in response.data
 
 
 def test_edit_interaction_form_is_rendered(authenticated_client, mock_database):
@@ -169,17 +176,16 @@ def test_redirects_to_interaction_form_when_interaction_edited_successfully(auth
     request_data = {'id': 1, 'date': '2023-06-08',
                     'title': 'The battle of Kalinga', 'notes': 'I repent everything so much. All those lives can never be gotten back again.', 'person_id': '1', 'contact_name': 'Ashoka'}
     response = authenticated_client.post(
-        '/edit_interaction/1/1/Ashoka', data=request_data)
-    assert response.status_code == 302
-    assert b'You should be redirected automatically to the target URL: <a href="/interactions/1/Ashoka">' in response.data
+        '/edit_interaction/1/1/Ashoka', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h1>Interactions - Ashoka</h1>' in response.data
 
 
-@pytest.mark.todo
-# rewrite with follow redirect
 def test_delete_interaction(authenticated_client, mock_database):
-    response = authenticated_client.get('/delete_interaction/1/1/Ashoka')
-    assert response.status_code == 302
-    assert b'You should be redirected automatically to the target URL: <a href="/interactions/1/Ashoka">' in response.data
+    response = authenticated_client.get(
+        '/delete_interaction/1/1/Ashoka', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h1>Interactions - Ashoka</h1>' in response.data
 
 
 def test_add_interaction_is_prefilled_with_todays_date(authenticated_client, mock_database):
