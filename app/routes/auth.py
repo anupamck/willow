@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 import flask
 from ..routes.db import DatabaseConnector, UserManager
 import flask_login
-from flask_login import UserMixin, login_user, logout_user, login_required
+from flask_login import UserMixin, login_user, logout_user, login_required, current_user
 import os
 from urllib.parse import urlparse, urljoin
 import datetime
@@ -37,7 +37,7 @@ class User(UserMixin):
 
 @auth_bp.route('/', methods=['GET', 'POST'])
 def login():
-    if flask_login.current_user.is_authenticated:
+    if current_user.is_authenticated:
         return redirect(url_for('home.get_home'))
 
     if request.method == 'GET':
