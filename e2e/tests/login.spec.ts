@@ -20,7 +20,7 @@ test('User cannot login with incorrect password', async ({ page }) => {
     await expect(page.getByText('Incorrect username or password')).toBeVisible();
 });
 
-test('Test User 2 is logged into the correct dataase', async ({ page }) => {
+test('Test User 2 is logged into the correct database', async ({ page }) => {
     await page.getByRole('textbox', { name: 'username' }).type('chandragupta');
     await page.getByRole('textbox', { name: 'password' }).type(process.env.TEST_USER_PASSWORD2!);
     await page.getByRole('button', { name: 'Login' }).click();
