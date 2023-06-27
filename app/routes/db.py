@@ -142,12 +142,12 @@ class UserManager:
             cnx.execute_query(query, params)
             cnx.connection.commit()
 
-    def initialize_user(self):
+    def initialize_user_db(self):
         query_interactions_table = '''
         CREATE TABLE IF NOT EXISTS interactions (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
             person_id INTEGER,
-            date DATE,
+            date TEXT,
             title TEXT,
             notes TEXT
         );
@@ -156,7 +156,7 @@ class UserManager:
         CREATE TABLE IF NOT EXISTS contacts (
             id INTEGER AUTO_INCREMENT PRIMARY KEY,
             name TEXT,
-            frequency INT
+            frequency INTEGER
         );
         '''
         with self.connector as cnx:
@@ -199,6 +199,9 @@ class UserManager:
         if user is None:
             return False
         else:
+            print(user['password'], 'password')
+            print(user['salt'], 'salt')
+            print(password, 'password')
             password_enc = bcrypt.hashpw(
-                password.encode('utf-8'), user['salt'].encode('utf-8'))
-            return password_enc == user['password'].encode('utf-8')
+                password.encode('utf-8'), user['salt'])
+            return password_enc == user['password']

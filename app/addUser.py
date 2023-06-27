@@ -4,11 +4,12 @@ import os
 
 load_dotenv()
 
-users_db = os.path.join(os.getenv('DB_PATH'), "users.db")
+username = 'brahma'
+password = os.getenv('USER_PASSWORD')
+email = 'wingfooted@gmail.com'
 
-test_user_db = os.path.join(os.getenv('DB_PATH'), "new_test_user.db")
+users_db = os.path.join(os.getenv('DB_PATH'), "users.db")
 
 with DatabaseConnector(database=users_db) as connector:
     user_manager = UserManager(connector)
-    user_manager.add_user('test_user', os.getenv(
-        'TEST_USER_PASSWORD'), 'ashoka@magadha.com', test_user_db)
+    user_manager.add_user(username, password, email, username + ".db")
