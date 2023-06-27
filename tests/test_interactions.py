@@ -191,7 +191,6 @@ def test_delete_interaction(authenticated_client, mock_database):
 def test_add_interaction_is_prefilled_with_todays_date(authenticated_client, mock_database):
     response = authenticated_client.get('/add_interaction/1/Ashoka')
     assert response.status_code == 200
-    print(response.data)
     today = datetime.date.today().strftime("%Y-%m-%d")
     date_field = f'<input type="date" id="date" name="date" value="{today}" required>'
     assert date_field.encode() in response.data

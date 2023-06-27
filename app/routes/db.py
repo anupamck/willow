@@ -199,9 +199,6 @@ class UserManager:
         if user is None:
             return False
         else:
-            print(user['password'], 'password')
-            print(user['salt'], 'salt')
-            print(password, 'password')
             password_enc = bcrypt.hashpw(
                 password.encode('utf-8'), user['salt'])
             return password_enc == user['password']
