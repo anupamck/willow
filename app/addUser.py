@@ -4,9 +4,9 @@ import os
 
 load_dotenv()
 
-username = 'brahma'
-password = os.getenv('USER_PASSWORD')
-email = 'wingfooted@gmail.com'
+username = 'newTestUser'
+password = os.getenv('NEW_USER_PASSWORD')
+email = 'newuser@gmail.com'
 
 users_db = os.path.join(os.getenv('DB_PATH'), "users.db")
 

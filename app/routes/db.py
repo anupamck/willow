@@ -144,19 +144,21 @@ class UserManager:
 
     def initialize_user_db(self):
         query_interactions_table = '''
-        CREATE TABLE IF NOT EXISTS interactions (
-            id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            person_id INTEGER,
-            date TEXT,
-            title TEXT,
-            notes TEXT
+        CREATE TABLE "interactions" (
+            "id" INTEGER UNIQUE,
+            "person_id"	INTEGER,
+            "date"	TEXT,
+            "title"	TEXT,
+            "notes"	TEXT,
+            PRIMARY KEY("id")
         );
         '''
         query_contacts_table = '''
-        CREATE TABLE IF NOT EXISTS contacts (
-            id INTEGER AUTO_INCREMENT PRIMARY KEY,
-            name TEXT,
-            frequency INTEGER
+        CREATE TABLE "contacts" (
+            "id" INTEGER UNIQUE,
+            "name" TEXT,
+            "frequency"	TEXT,
+            PRIMARY KEY("id" AUTOINCREMENT)
         );
         '''
         with self.connector as cnx:
