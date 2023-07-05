@@ -45,9 +45,9 @@ def mock_user_details(mocker):
     mocker.patch('sqlite3.connect')
 
     # prepare mock responses
-    salt = '$2b$12$VUEfecQgohf4CKkB2loTKO'
+    salt = b'$2b$12$VUEfecQgohf4CKkB2loTKO'
     password_hashed = bcrypt.hashpw(
-        "testPassword".encode('utf-8'), salt.encode('utf-8')).decode('utf-8')
+        "testPassword".encode('utf-8'), salt)
 
     user_details_ashoka = {
         'username': 'ashoka',
