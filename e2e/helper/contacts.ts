@@ -16,7 +16,7 @@ export async function deleteTestContactRows(page, testUserName) {
 export async function createTestContactRow(page, name, frequency) {
     await page.getByRole('button', { name: 'Add Contact' }).click();
     await page.getByLabel('Name:').fill(name);
-    await page.getByLabel('Frequency:').fill(frequency);
+    await page.getByLabel('Frequency (in days):').fill(frequency);
     await page.getByRole('button', { name: 'Save Changes' }).click();
 }
 
