@@ -1,15 +1,47 @@
+body {
+  margin-left: 10%;
+  max-width: 55em;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  font-size: large;
+  line-height: 1.8em;
+  padding-bottom: 2em;
+}
+
 a:link,
 a:visited {
   color: #189ad3;
 }
 
-.table-container {
-  width: 50%;
+h1,
+h2,
+h3 {
+  font-family: sohne, sans-serif;
+  font-weight: normal;
+  color: #000000;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+nav#sidebar {
+  margin-top: 10px;
+  padding-right: 30px;
+  margin-bottom: 10px;
+  position: sticky;
+}
+
+nav a {
+  display: block;
+}
+
+section.table-container table {
+  min-width: 45vw;
 }
 
 table {
   border-collapse: collapse;
-  width: 100%;
 }
 
 th,
@@ -19,17 +51,16 @@ td {
   border-bottom: 1px solid #ddd;
 }
 
-th {
-  background-color: #f2f2f2;
-}
-
 td.date {
-  width: 1%;
   white-space: nowrap;
 }
 
 td.title {
-  width: 20%;
+  min-width: 150px;
+}
+
+th {
+  background-color: #f2f2f2;
 }
 
 td.notes {
@@ -54,7 +85,8 @@ button {
   background-color: #4CAF50;
   color: white;
   padding: 10px;
-  margin: 30px 20px;
+  margin: 10px;
+  margin-bottom: 25px;
   border: none;
   cursor: pointer;
 }

@@ -1,38 +1,28 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>Willow - Home</title>
-  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
-</head>
-
-<body>
-  <h1>Home - {{ current_user.username }}</h1>
-  <section class="table-container">
-    <table aria-label="home-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Frequency (days)</th>
-          <th>Last Interaction</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for contact in contacts %}
-        <tr>
-          <td><a
-              href="{{ url_for('interactions.get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{
-              contact.name }}</a></td>
-          <td>{{ contact.frequency }}</td>
-          <td class="date">{{ contact.last_interaction }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </section>
-  <a href="{{ url_for('contacts.get_contacts') }}"><button>Contacts</button></a>
-  <a href="{{ url_for('auth.logout') }}"><button class="secondary">Logout</button></a>
-</body>
-
-</html>
+<h2>Long time no speak</h2>
+<section class="table-container">
+  <table aria-label="home-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Frequency (days)</th>
+        <th>Last Interaction</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contact in contacts %}
+      <tr>
+        <td><a href="{{ url_for('interactions.get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{
+            contact.name }}</a></td>
+        <td>{{ contact.frequency }}</td>
+        <td class="date">{{ contact.last_interaction }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+<a href="{{ url_for('auth.logout') }}"><button class="secondary">Logout</button></a>
+{% endblock %}

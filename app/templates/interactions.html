@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Willow - Interactions</title>
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
-    <script src="{{ url_for('static', filename='confirmDeleteInteraction.js') }}"></script>
-</head>
-
-<body>
-    <h1>Interactions - {{ contact_name }}</h1>
+{% extends 'base.html' %}
+{% block title %}Interactions - {{ contact_name }}{% endblock %}
+{% block content %}
+<h2>Interactions - {{ contact_name }}</h1>
+    <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
+            Interaction</button></a>
     <section class="table-container">
         <table aria-label="interactions-table">
             <thead>
@@ -36,11 +31,5 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{{ url_for('home.get_home') }}"><button>Home</button></a>
-        <a href="{{ url_for('contacts.get_contacts') }}"><button>Contacts</button></a>
-        <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
-                Interaction</button></a>
     </section>
-</body>
-
-</html>
+    {% endblock %}
