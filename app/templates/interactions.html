@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Interactions - {{ contact_name }}{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="{{ url_for('static', filename='confirmDeleteInteraction.js') }}"></script>
+{% endblock %}
 {% block content %}
 <h2>Interactions - {{ contact_name }}</h1>
     <div class="button-container">

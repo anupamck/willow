@@ -18,28 +18,34 @@
       Edit Contact
       {% endif %}
     </h2>
-    {% if form_type == 'add' %}
-    <form action="{{ url_for('contacts.add_contact') }}" method="POST">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" value="" required><br><br>
-      <label for="frequency">Frequency (in days):</label>
-      <input type="number" id="frequency" name="frequency" value="" required min="1"><br><br>
-      <button type="submit">Save Changes</button>
-    </form>
-    {% else %}
-    <form action="{{ url_for('contacts.edit_contact', person_id=contact[0]) }}" method="POST">
-      <input type="hidden" id="contact-id" name="id" value="{{ contact[0] }}">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" value="{{ contact[1] }}" required><br><br>
-      <label for="frequency">Frequency (in days):</label>
-      <input type="number" id="frequency" name="frequency" value="{{ contact[2] }}" required min="1"><br><br>
-      <button type="submit">Save Changes</button>
-    </form>
-    {% endif %}
-    <div class="flash">
-      {% for message in get_flashed_messages() %}
-      {{ message }}
-      {% endfor %}
+    <div class="contact-form">
+      {% if form_type == 'add' %}
+      <form action="{{ url_for('contacts.add_contact') }}" method="POST">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" value="" required><br><br>
+          <label for="frequency">Frequency (in days):</label>
+          <input type="number" id="frequency" name="frequency" value="" required min="1"><br><br>
+          <button type="submit">Save Changes</button>
+        </div>
+      </form>
+      {% else %}
+      <form action="{{ url_for('contacts.edit_contact', person_id=contact[0]) }}" method="POST">
+        <input type="hidden" id="contact-id" name="id" value="{{ contact[0] }}">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" value="{{ contact[1] }}" required><br><br>
+          <label for="frequency">Frequency (in days):</label>
+          <input type="number" id="frequency" name="frequency" value="{{ contact[2] }}" required min="1"><br><br>
+          <button type="submit">Save Changes</button>
+        </div>
+      </form>
+      {% endif %}
+      <div class="flash">
+        {% for message in get_flashed_messages() %}
+        {{ message }}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>

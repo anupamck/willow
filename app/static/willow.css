@@ -113,8 +113,21 @@ nav a {
 }
 
 .form-group label {
-  width: 90px;
-  display: inline-block
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.login-form .form-group label {
+  min-width: 120px;
+}
+
+.contact-form .form-group label {
+  min-width: 180px;
+}
+
+.interaction-form .form-group label {
+  min-width: 100px;
 }
 
 
@@ -255,10 +268,6 @@ button.delete-button:hover {
 .interactions-table-wrapper tr {
   display: flex;
   flex-direction: row;
-}
-
-.notes-input label {
-  margin-right: 0.5rem;
 }
 
 .flash {
