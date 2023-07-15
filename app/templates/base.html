@@ -6,11 +6,22 @@
     {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
     <title>Willow - {% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icon.png') }}" />
     {% endblock %}
 </head>
 
 <body>
-    <h1>Willow</h1>
+    <nav id="topbar">
+        <div class="center">
+            <h1>Willow</h1>
+        </div>
+        {% if current_user.is_authenticated %}
+        <div class="right">
+            <p id="username">{{ current_user.username }}</p>
+            <a href="{{ url_for('auth.logout') }}"><button class="secondary" id="logout">Logout</button></a>
+        </div>
+        {% endif %}
+    </nav>
     <div class="wrapper">
         {% if current_user.is_authenticated %}
         <nav id="sidebar">

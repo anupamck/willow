@@ -1,3 +1,43 @@
+nav#topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #b7fab9;
+  color: #8B4513;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+nav .center {
+  text-align: center;
+  flex-grow: 1;
+}
+
+nav .center h1 {
+  margin: 0;
+}
+
+nav .right {
+  display: flex;
+  align-items: center;
+}
+
+nav .right p {
+  margin-right: 20px;
+}
+
+nav #logout {
+  background-color: #8B4513;
+  color: white;
+  border: none;
+  margin: 0px 10px;
+}
+
+nav #logout:hover {
+  background-color: #A0522D;
+  /* Darker Brown */
+}
+
 body {
   margin-left: 10%;
   max-width: 55em;
