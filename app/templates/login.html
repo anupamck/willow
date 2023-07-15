@@ -1,21 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<h1>Login</h1>
-<section class="login-form">
-    <form action="{{ url_for('auth.login')}}" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required aria-label="username"><br><br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required aria-label="password"><br><br>
-        <div class="flash">
-            {% for message in get_flashed_messages() %}
-            {{ message }}
-            {% endfor %}
-        </div>
-        <button type="submit">Login</button>
-    </form>
-</section>
+
+<div class="login-wrapper">
+    <section class="login-form">
+        <h2>Login</h2>
+        <form action="{{ url_for('auth.login')}}" method="POST">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" required aria-label="username"><br><br>
+                <label for="password">Password:</label>
+                <input type="password" name="password" required aria-label="password"><br><br>
+            </div>
+            <div class="flash">
+                {% for message in get_flashed_messages() %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </section>
+    <div class="logo-image">
+        <img src="{{ url_for('static', filename='icon.png') }}" alt="Willow logo - a sketch of a willow tree">
+    </div>
+</div>
 {% endblock %}
 
 </html>

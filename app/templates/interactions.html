@@ -2,10 +2,12 @@
 {% block title %}Interactions - {{ contact_name }}{% endblock %}
 {% block content %}
 <h2>Interactions - {{ contact_name }}</h1>
-    <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
-            Interaction</button></a>
+    <div class="button-container">
+        <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
+                Interaction</button></a>
+    </div>
     <section class="table-container">
-        <table aria-label="interactions-table">
+        <table class="interactions-table" aria-label="interactions-table">
             <thead>
                 <tr>
                     <th>Date</th>

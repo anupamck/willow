@@ -2,29 +2,34 @@
 {% block title %} Contacts {% endblock %}
 {% block content %}
 <h2> My Contacts </h2>
-<a href="{{ url_for('contacts.add_contact') }}"><button>Add Contact</button></a>
-<section class="table-container">
-  <table aria-label="contacts-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Frequency (days)</th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for contact in contacts %}
-      <tr>
-        <td><a href="{{ url_for('interactions.get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{
-            contact.name }}</a></td>
-        <td>{{ contact.frequency }}</td>
-        <td><a href="{{ url_for('contacts.edit_contact', person_id=contact.id) }}"><button
-              class="edit-button">Edit</button></a></td>
-        <td><button class="delete-button" onclick="confirmDeleteContact('{{ contact.id }}')">Delete</button></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<section class="main">
+  <div class="button-container">
+    <a href="{{ url_for('contacts.add_contact') }}"><button>Add Contact</button></a>
+  </div>
+  <section class="table-container">
+    <table aria-label="contacts-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Frequency (days)</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for contact in contacts %}
+        <tr>
+          <td><a
+              href="{{ url_for('interactions.get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{
+              contact.name }}</a></td>
+          <td>{{ contact.frequency }}</td>
+          <td><a href="{{ url_for('contacts.edit_contact', person_id=contact.id) }}"><button
+                class="edit-button">Edit</button></a></td>
+          <td><button class="delete-button" onclick="confirmDeleteContact('{{ contact.id }}')">Delete</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
 </section>
 {% endblock %}

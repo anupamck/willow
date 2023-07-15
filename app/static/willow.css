@@ -1,11 +1,11 @@
 nav#topbar {
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #b7fab9;
-  color: #8B4513;
-  min-width: 100%;
-  max-width: 100%;
+  padding: 10px;
+  min-height: 50px;
 }
 
 nav .center {
@@ -27,15 +27,12 @@ nav .right p {
 }
 
 nav #logout {
-  background-color: #8B4513;
-  color: white;
   border: none;
   margin: 0px 10px;
 }
 
 nav #logout:hover {
-  background-color: #A0522D;
-  /* Darker Brown */
+  background-color: lightgreen;
 }
 
 body {
@@ -45,6 +42,10 @@ body {
   font-size: large;
   line-height: 1.8em;
   padding-bottom: 2em;
+}
+
+.main {
+  flex-grow: 1;
 }
 
 a:link,
@@ -72,9 +73,50 @@ nav#sidebar {
   position: sticky;
 }
 
+nav#sidebar a:link,
+nav#sidebar a:visited {
+  color: black;
+  text-decoration: none;
+  padding: 0px 5px;
+}
+
 nav a {
   display: block;
 }
+
+.login-form h1 {
+  line-height: normal;
+}
+
+.login-form {
+  white-space: nowrap;
+}
+
+.login-wrapper {
+  display: flex;
+}
+
+.logo-image {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.logo-image img {
+  max-width: 40%;
+}
+
+
+.form-group {
+  align-items: center;
+  line-height: 1.2em;
+}
+
+.form-group label {
+  width: 90px;
+  display: inline-block
+}
+
 
 section.table-container table {
   min-width: 45vw;
@@ -88,6 +130,10 @@ th,
 td {
   padding: 8px;
   text-align: left;
+}
+
+th,
+.interactions-table td {
   border-bottom: 1px solid #ddd;
 }
 
@@ -99,45 +145,66 @@ td.title {
   min-width: 150px;
 }
 
-th {
-  background-color: #f2f2f2;
-}
-
 td.notes {
   white-space: pre-line;
 }
 
 td button {
   background-color: blue;
+  color: white;
   white-space: nowrap;
   font-size: small;
   padding: 3px;
   margin: 0px;
   width: 50px;
   float: right;
+  border-radius: 10px;
+}
+
+td button:hover {
+  background-color: navy;
 }
 
 tr:hover {
   background-color: #f5f5f5;
 }
 
+tr a:link,
+tr a:visited {
+  text-decoration: none;
+}
+
 button {
-  background-color: #4CAF50;
-  color: white;
   padding: 10px;
   margin: 10px;
   margin-bottom: 25px;
   border: none;
   cursor: pointer;
+  background: none;
+  font-size: large;
 }
 
-button.secondary {
-  background-color: #82818196;
+button:hover,
+nav#sidebar a:hover {
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  /* Darker Brown */
 }
 
 button.delete-button {
   background-color: #f44336;
   float: right;
+  color: white;
+  border-radius: 10px;
+}
+
+button.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .modal-shell {
@@ -185,7 +252,7 @@ button.delete-button {
   cursor: pointer;
 }
 
-.notes-input {
+.interactions-table-wrapper tr {
   display: flex;
   flex-direction: row;
 }
@@ -197,4 +264,5 @@ button.delete-button {
 .flash {
   color: red;
   font-weight: bold;
+  margin-bottom: 10px;
 }

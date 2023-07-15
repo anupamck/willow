@@ -18,7 +18,7 @@
         {% if current_user.is_authenticated %}
         <div class="right">
             <p id="username">{{ current_user.username }}</p>
-            <a href="{{ url_for('auth.logout') }}"><button class="secondary" id="logout">Logout</button></a>
+            <a href="{{ url_for('auth.logout') }}"><button id="logout">Logout</button></a>
         </div>
         {% endif %}
     </nav>
