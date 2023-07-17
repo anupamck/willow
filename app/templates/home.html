@@ -3,6 +3,11 @@
 {% block content %}
 
 <h2>Long time no speak</h2>
+{% if contacts == [] %}
+<p>Congratulations! You are all caught up.</p>
+<img src="{{ url_for('static', filename='celebrate.png') }}" alt="A more colourful willow tree" class="celebrate-image">
+<p>To add more contacts, click <a href="{{ url_for('contacts.add_contact') }}">here</a>.</p>
+{% else %}
 <section class="table-container">
   <table aria-label="home-table">
     <thead>
@@ -24,4 +29,5 @@
     </tbody>
   </table>
 </section>
+{% endif %}
 {% endblock %}

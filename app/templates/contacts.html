@@ -6,6 +6,11 @@
 {% endblock %}
 {% block content %}
 <h2>My Contacts</h2>
+{% if contacts == [] %}
+<p>You don't have any contacts.</p>
+<p>To add a new contact, click <a href="{{ url_for('contacts.add_contact') }}">here</a>.</p>
+</p>
+{% else %}
 <section class="main">
   <div class="button-container">
     <a href="{{ url_for('contacts.add_contact') }}"><button>Add Contact</button></a>
@@ -36,4 +41,5 @@
     </table>
   </section>
 </section>
+{% endif %}
 {% endblock %}

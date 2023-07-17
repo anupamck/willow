@@ -85,6 +85,33 @@ def mock_database(mocker):
                         )
 
 
+@pytest.fixture
+def mock_database_no_contacts(mocker):
+    mocker.patch('sqlite3.connect')
+
+    # Mock the return value of the get_overdue_contacts method
+    database_response = []
+
+    user = User('ashoka')
+    user.username = 'ashoka'
+    user.database = "ashoka.db"
+
+    mocker.patch.object(ContactManager,
+                        'get_contacts',
+                        return_value=database_response
+                        )
+
+    mocker.patch.object(ContactManager,
+                        'get_contact',
+                        return_value=None
+                        )
+
+    mocker.patch.object(User,
+                        'get',
+                        return_value=user
+                        )
+
+
 def test_not_logged_in_user_redirected_to_login_page(client):
     response = client.get('/contacts', follow_redirects=True)
     assert response.status_code == 200
@@ -161,3 +188,11 @@ def test_delete_contact(authenticated_client, mock_database):
         '/delete_contact/1', follow_redirects=True)
     assert response.status_code == 200
     assert b'<h2>My Contacts</h2>' in response.data
+
+
+def test_no_contacts(authenticated_client, mock_database_no_contacts):
+    response = authenticated_client.get('/contacts')
+    assert response.status_code == 200
+    assert b'<h2>My Contacts</h2>' in response.data
+    assert b"You don't have any contacts" in response.data
+    assert b'To add a new contact, click <a href="/add_contact">here' in response.data

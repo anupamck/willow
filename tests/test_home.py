@@ -81,6 +81,29 @@ def mock_database(mocker):
                         )
 
 
+@pytest.fixture
+def mock_database_no_overdue_contacts(mocker):
+    # Patch the entire mysql.connector module to mock database interactions
+    mocker.patch('sqlite3.connect')
+
+    # Mock the return value of the get_overdue_contacts method
+    database_response = []
+
+    user = User('ashoka')
+    user.username = 'ashoka'
+    user.database = "ashoka.db"
+
+    mocker.patch.object(ContactManager,
+                        'get_overdue_contacts',
+                        return_value=database_response
+                        )
+
+    mocker.patch.object(User,
+                        'get',
+                        return_value=user
+                        )
+
+
 def test_not_logged_in_user_redirected_to_login_page(client):
     response = client.get('/home', follow_redirects=True)
     assert response.status_code == 200
@@ -101,3 +124,12 @@ def test_overdue_contacts_are_rendered(authenticated_client, mock_database):
     assert response.status_code == 200
     assert b'Kujula Kadphises' in response.data
     assert b'Kanishka' in response.data
+
+
+def test_no_overdue_contacts(authenticated_client, mock_database_no_overdue_contacts):
+    # Make assertions based on the mocked data
+    response = authenticated_client.get('/home')
+    assert response.status_code == 200
+    assert b'Congratulations! You are all caught up.' in response.data
+    assert b'<img src="/static/celebrate.png" alt="A more colourful willow tree" class="celebrate-image">' in response.data
+    assert b'To add more contacts, click <a href="/add_contact">here' in response.data

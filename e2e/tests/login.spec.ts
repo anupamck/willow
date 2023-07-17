@@ -25,5 +25,5 @@ test('Test User 2 is logged into the correct database', async ({ page }) => {
     await page.getByRole('textbox', { name: 'password' }).type(process.env.TEST_USER_PASSWORD2!);
     await page.getByRole('button', { name: 'Login' }).click();
     await expect(page).toHaveURL('/home');
-    await expect(page.getByRole('cell', { name: /kautilya/i })).toBeVisible();
+    await expect(page.getByText("Congratulations! You are all caught up.")).toBeVisible();
 });

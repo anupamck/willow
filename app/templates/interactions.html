@@ -6,6 +6,12 @@
 {% endblock %}
 {% block content %}
 <h2>Interactions - {{ contact_name }}</h2>
+{% if interactions == [] %}
+<p>You don't have any interactions with {{ contact_name }}.</p>
+<p>To add a new interaction, click <a
+        href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }}">here</a>.
+</p>
+{% else %}
 <div class="button-container">
     <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
             Interaction</button></a>
@@ -38,4 +44,5 @@
         </tbody>
     </table>
 </section>
+{% endif %}
 {% endblock %}
