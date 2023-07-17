@@ -89,13 +89,13 @@ def test_not_logged_in_user_redirected_to_login_page(client):
     response = client.get('/contacts', follow_redirects=True)
     assert response.status_code == 200
     assert b'Please log in to access this page.' in response.data
-    assert b'<h1>Login</h1>' in response.data
+    assert b'<h2>Login</h2>' in response.data
 
 
 def test_template_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/contacts')
     assert response.status_code == 200
-    assert b'<h1>My Contacts</h1>' in response.data
+    assert b'<h2>My Contacts</h2>' in response.data
     assert b'<table aria-label="contacts-table">' in response.data
 
 
@@ -128,7 +128,7 @@ def test_redirects_to_contacts_page_when_contact_added_successfully(authenticate
     response = authenticated_client.post(
         '/add_contact', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'<h1>My Contacts</h1>' in response.data
+    assert b'<h2>My Contacts</h2>' in response.data
 
 
 def test_edit_contact_form_is_rendered(authenticated_client, mock_database):
@@ -153,11 +153,11 @@ def test_redirects_to_contact_form_when_contact_edited_successfully(authenticate
     response = authenticated_client.post(
         '/edit_contact/1', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'<h1>My Contacts</h1>' in response.data
+    assert b'<h2>My Contacts</h2>' in response.data
 
 
 def test_delete_contact(authenticated_client, mock_database):
     response = authenticated_client.get(
         '/delete_contact/1', follow_redirects=True)
     assert response.status_code == 200
-    assert b'<h1>My Contacts</h1>' in response.data
+    assert b'<h2>My Contacts</h2>' in response.data

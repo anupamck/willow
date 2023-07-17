@@ -5,37 +5,37 @@
 <script src="{{ url_for('static', filename='confirmDeleteInteraction.js') }}"></script>
 {% endblock %}
 {% block content %}
-<h2>Interactions - {{ contact_name }}</h1>
-    <div class="button-container">
-        <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
-                Interaction</button></a>
-    </div>
-    <section class="table-container">
-        <table class="interactions-table" aria-label="interactions-table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Title</th>
-                    <th>Notes</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for interaction in interactions %}
-                <tr>
-                    <td class="date">{{ interaction.date }}</td>
-                    <td class="title">{{ interaction.title }}</td>
-                    <td class="notes">{{ interaction.notes }}</td>
-                    <td><a
-                            href="{{ url_for('interactions.edit_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"><button
-                                class="edit-button">Edit</button></a></td>
-                    <td><button class="delete-button"
-                            onclick="confirmDeleteInteraction('{{ interaction.id }}', '{{ person_id }}', '{{ contact_name }}')">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-    {% endblock %}
+<h2>Interactions - {{ contact_name }}</h2>
+<div class="button-container">
+    <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
+            Interaction</button></a>
+</div>
+<section class="table-container">
+    <table class="interactions-table" aria-label="interactions-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Notes</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for interaction in interactions %}
+            <tr>
+                <td class="date">{{ interaction.date }}</td>
+                <td class="title">{{ interaction.title }}</td>
+                <td class="notes">{{ interaction.notes }}</td>
+                <td><a
+                        href="{{ url_for('interactions.edit_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"><button
+                            class="edit-button">Edit</button></a></td>
+                <td><button class="delete-button"
+                        onclick="confirmDeleteInteraction('{{ interaction.id }}', '{{ person_id }}', '{{ contact_name }}')">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

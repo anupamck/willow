@@ -92,11 +92,10 @@ def mock_overdue_contacts(mocker):
                         return_value=database_response)
 
 
-@pytest.fixture
 def test_login_template_is_rendered(client):
     response = client.get('/')
     assert response.status_code == 200
-    assert b'<h1>Login</h1>' in response.data
+    assert b'<h2>Login</h2>' in response.data
     assert b'<form action="/" method="POST">' in response.data
     assert b'<label for="username">Username:</label>' in response.data
     assert b'<label for="password">Password:</label>' in response.data
@@ -106,7 +105,7 @@ def test_submitting_incomplete_login_form_flashes_error(client):
     request_data = {'username': '', 'password': 'testPassword'}
     response = client.post('/', data=request_data)
     assert response.status_code == 200
-    assert b'<h1>Login</h1>' in response.data
+    assert b'<h2>Login</h2>' in response.data
     assert b'Username is required.' in response.data
 
 
@@ -114,7 +113,7 @@ def test_submitting_incorrect_username_flashes_error(client, mock_user_details):
     request_data = {'username': 'testUser', 'password': 'testPassword'}
     response = client.post('/', data=request_data)
     assert response.status_code == 200
-    assert b'<h1>Login</h1>' in response.data
+    assert b'<h2>Login</h2>' in response.data
     assert b'Incorrect username or password.' in response.data
 
 
@@ -122,7 +121,7 @@ def test_submitting_incorrect_password_flashes_error(client, mock_user_details):
     request_data = {'username': 'ashoka', 'password': 'wrongPassword'}
     response = client.post('/', data=request_data)
     assert response.status_code == 200
-    assert b'<h1>Login</h1>' in response.data
+    assert b'<h2>Login</h2>' in response.data
     assert b'Incorrect username or password.' in response.data
 
 
@@ -130,4 +129,4 @@ def test_submitting_correct_username_and_password_redirects_user_to_home(client,
     request_data = {'username': 'ashoka', 'password': 'testPassword'}
     response = client.post('/', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'<h1>Home - ashoka</h1>' in response.data
+    assert b'<h2>Long time no speak</h2>' in response.data

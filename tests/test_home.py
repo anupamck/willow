@@ -85,13 +85,13 @@ def test_not_logged_in_user_redirected_to_login_page(client):
     response = client.get('/home', follow_redirects=True)
     assert response.status_code == 200
     assert b'Please log in to access this page.' in response.data
-    assert b'<h1>Login</h1>' in response.data
+    assert b'<h2>Login</h2>' in response.data
 
 
 def test_logged_in_user_can_access_home_page(authenticated_client, mock_database):
     response = authenticated_client.get('/home')
     assert response.status_code == 200
-    assert b'<h1>Home - ashoka</h1>' in response.data
+    assert b'<h2>Long time no speak</h2>' in response.data
     assert b'<table aria-label="home-table">' in response.data
 
 

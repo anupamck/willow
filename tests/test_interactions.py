@@ -102,14 +102,14 @@ def test_not_logged_in_user_redirected_to_login_page(client):
         '/interactions/1/Ashoka', follow_redirects=True)
     assert response.status_code == 200
     assert b'Please log in to access this page.' in response.data
-    assert b'<h1>Login</h1>' in response.data
+    assert b'<h2>Login</h2>' in response.data
 
 
 def test_interactions_template_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/interactions/1/Ashoka')
     assert response.status_code == 200
-    assert b'<h1>Interactions - Ashoka</h1>' in response.data
-    assert b'<table aria-label="interactions-table">' in response.data
+    assert b'<h2>Interactions - Ashoka</h2>' in response.data
+    assert b'<table class="interactions-table" aria-label="interactions-table">' in response.data
 
 
 def test_interactions_are_rendered(authenticated_client, mock_database):
@@ -128,7 +128,7 @@ def test_interactions_are_rendered(authenticated_client, mock_database):
 def test_add_interaction_form_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/interactions/1/Ashoka')
     assert response.status_code == 200
-    assert b'<h1>Interactions - Ashoka</h1>' in response.data
+    assert b'<h2>Interactions - Ashoka</h2>' in response.data
     assert b'The battle of Kalinga' in response.data
     assert b'I repent everything so much' in response.data
     assert b'2023-07-08' in response.data
@@ -150,7 +150,7 @@ def test_redirects_to_interactions_page_when_interaction_added_successfully(auth
     response = authenticated_client.post(
         '/add_interaction/1/Ashoka', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'<h1>Interactions - Ashoka</h1>' in response.data
+    assert b'<h2>Interactions - Ashoka</h2>' in response.data
 
 
 def test_edit_interaction_form_is_rendered(authenticated_client, mock_database):
@@ -178,14 +178,14 @@ def test_redirects_to_interaction_form_when_interaction_edited_successfully(auth
     response = authenticated_client.post(
         '/edit_interaction/1/1/Ashoka', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'<h1>Interactions - Ashoka</h1>' in response.data
+    assert b'<h2>Interactions - Ashoka</h2>' in response.data
 
 
 def test_delete_interaction(authenticated_client, mock_database):
     response = authenticated_client.get(
         '/delete_interaction/1/1/Ashoka', follow_redirects=True)
     assert response.status_code == 200
-    assert b'<h1>Interactions - Ashoka</h1>' in response.data
+    assert b'<h2>Interactions - Ashoka</h2>' in response.data
 
 
 def test_add_interaction_is_prefilled_with_todays_date(authenticated_client, mock_database):
