@@ -1,24 +1,32 @@
 body {
   margin-left: 10%;
   max-width: 55em;
-  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: large;
   line-height: 1.8em;
   padding-bottom: 2em;
+  background: #ebecdb;
 }
 
 .main {
   flex-grow: 1;
 }
 
-nav#topbar {
+nav.topbar {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #b7fab9;
+  background-color: #1b631e;
   padding: 10px;
   min-height: 50px;
+  color: rgb(201, 198, 198);
+  border-radius: 5px;
+}
+
+nav.topbar button {
+  background: none;
+  color: rgb(201, 198, 198);
 }
 
 nav .center {
@@ -28,6 +36,8 @@ nav .center {
 
 nav .center h1 {
   margin: 0;
+  color: rgb(201, 198, 198);
+  font-weight: normal;
 }
 
 nav .right {
@@ -45,7 +55,7 @@ nav #logout {
 }
 
 nav #logout:hover {
-  background-color: lightgreen;
+  background-color: #238026;
 }
 
 
@@ -58,9 +68,9 @@ nav#sidebar {
 
 nav#sidebar a:link,
 nav#sidebar a:visited {
-  color: black;
   text-decoration: none;
-  padding: 0px 5px;
+  padding: 0px 7px;
+  border-radius: 20px;
 }
 
 nav a {
@@ -76,9 +86,11 @@ a:visited {
 h1,
 h2,
 h3 {
-  font-family: sohne, sans-serif;
-  font-weight: normal;
   color: #000000;
+}
+
+h2 {
+  font-size: 1.3em;
 }
 
 .wrapper {
@@ -88,27 +100,25 @@ h3 {
 
 
 button {
-  padding: 10px;
+  padding: 10px 15px;
   margin: 10px;
   margin-bottom: 25px;
   border: none;
   cursor: pointer;
-  background: none;
+  background: #1b631e;
+  border-radius: 20px;
   font-size: large;
+  color: rgb(201, 198, 198)
 }
 
-button:hover,
-nav#sidebar a:hover {
-  border-radius: 20px;
-  background-color: #f2f2f2;
-  /* Darker Brown */
+button:hover {
+  background-color: #238026;
 }
 
 button.delete-button {
-  background-color: #f44336;
+  background-color: #c3362c;
   float: right;
   color: white;
-  border-radius: 10px;
 }
 
 button.delete-button:hover {
@@ -120,6 +130,9 @@ button.delete-button:hover {
   justify-content: flex-end;
 }
 
+nav#sidebar a:hover {
+  background-color: #d4d5c6;
+}
 
 table {
   border-collapse: collapse;
@@ -134,6 +147,10 @@ td {
 th,
 .interactions-table td {
   border-bottom: 1px solid #ddd;
+}
+
+.interactions-table tbody {
+  font-family: cursive, sans-serif;
 }
 
 td.date {
@@ -157,7 +174,7 @@ td button {
   margin: 0px;
   width: 50px;
   float: right;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 td button:hover {
@@ -165,7 +182,7 @@ td button:hover {
 }
 
 tr:hover {
-  background-color: #f5f5f5;
+  background-color: #d6d8c5;
 }
 
 tr a:link,
@@ -199,7 +216,8 @@ section.table-container table {
   margin-top: 20px;
 }
 
-.logo-image img {
+.logo-image img,
+.celebrate-image {
   max-width: 40%;
 }
 
@@ -247,12 +265,13 @@ section.table-container table {
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #ebecdb;
   margin: 5% auto;
   /* 15% from the top and centered */
   margin-left: 5%;
   padding: 20px;
   border: 1px solid #888;
+  border-radius: 20px;
   width: 50%;
   /* Could be more or less, depending on screen size */
 }
