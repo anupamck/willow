@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 test('contacts page has the correct layout', async ({ page }) => {
     await expect(page).toHaveURL('/contacts');
     await expect(page.getByRole('heading', { name: 'My Contacts' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Home' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'home' })).toBeVisible();
     await expect(page.getByRole('table', { name: /contacts\-table/ })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Add Contact' })).toBeVisible();
 });

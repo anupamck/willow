@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 test('interactions page has the correct layout', async ({ page }) => {
     await expect(page).toHaveURL(/\/interactions\/.*/);
     await expect(page.getByRole('heading', { name: 'Interaction test user' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Home' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'home' })).toBeVisible();
     await expect(page.getByRole('table', { name: /interactions\-table/ })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Add Interaction' })).toBeVisible();
 });
