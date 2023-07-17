@@ -1,3 +1,16 @@
+body {
+  margin-left: 10%;
+  max-width: 55em;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  font-size: large;
+  line-height: 1.8em;
+  padding-bottom: 2em;
+}
+
+.main {
+  flex-grow: 1;
+}
+
 nav#topbar {
   margin-top: 20px;
   display: flex;
@@ -35,36 +48,6 @@ nav #logout:hover {
   background-color: lightgreen;
 }
 
-body {
-  margin-left: 10%;
-  max-width: 55em;
-  font-family: "Trebuchet MS", Tahoma, sans-serif;
-  font-size: large;
-  line-height: 1.8em;
-  padding-bottom: 2em;
-}
-
-.main {
-  flex-grow: 1;
-}
-
-a:link,
-a:visited {
-  color: #189ad3;
-}
-
-h1,
-h2,
-h3 {
-  font-family: sohne, sans-serif;
-  font-weight: normal;
-  color: #000000;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: row;
-}
 
 nav#sidebar {
   margin-top: 10px;
@@ -84,56 +67,59 @@ nav a {
   display: block;
 }
 
-.login-form h1 {
-  line-height: normal;
+
+a:link,
+a:visited {
+  color: #189ad3;
 }
 
-.login-form {
-  white-space: nowrap;
+h1,
+h2,
+h3 {
+  font-family: sohne, sans-serif;
+  font-weight: normal;
+  color: #000000;
 }
 
-.login-wrapper {
+.wrapper {
   display: flex;
+  flex-direction: row;
 }
 
-.logo-image {
+
+button {
+  padding: 10px;
+  margin: 10px;
+  margin-bottom: 25px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  font-size: large;
+}
+
+button:hover,
+nav#sidebar a:hover {
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  /* Darker Brown */
+}
+
+button.delete-button {
+  background-color: #f44336;
+  float: right;
+  color: white;
+  border-radius: 10px;
+}
+
+button.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.button-container {
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
 }
 
-.logo-image img {
-  max-width: 40%;
-}
-
-
-.form-group {
-  align-items: center;
-  line-height: 1.2em;
-}
-
-.form-group label {
-  white-space: nowrap;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.login-form .form-group label {
-  min-width: 120px;
-}
-
-.contact-form .form-group label {
-  min-width: 180px;
-}
-
-.interaction-form .form-group label {
-  min-width: 100px;
-}
-
-
-section.table-container table {
-  min-width: 45vw;
-}
 
 table {
   border-collapse: collapse;
@@ -187,37 +173,58 @@ tr a:visited {
   text-decoration: none;
 }
 
-button {
-  padding: 10px;
-  margin: 10px;
-  margin-bottom: 25px;
-  border: none;
-  cursor: pointer;
-  background: none;
-  font-size: large;
+section.table-container table {
+  min-width: 45vw;
 }
 
-button:hover,
-nav#sidebar a:hover {
-  border-radius: 20px;
-  background-color: #f2f2f2;
-  /* Darker Brown */
+.login-form h1 {
+  line-height: normal;
 }
 
-button.delete-button {
-  background-color: #f44336;
-  float: right;
-  color: white;
-  border-radius: 10px;
+.login-form {
+  white-space: nowrap;
 }
 
-button.delete-button:hover {
-  background-color: #d32f2f;
+.login-form .form-group label {
+  min-width: 120px;
 }
 
-.button-container {
+.login-wrapper {
+  display: flex;
+}
+
+.logo-image {
   display: flex;
   justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.logo-image img {
+  max-width: 40%;
+}
+
+.form-group {
+  align-items: center;
+  line-height: 1.2em;
+}
+
+.form-group label {
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.contact-form .form-group label {
+  min-width: 180px;
+}
+
+.interaction-form .form-group label {
+  min-width: 100px;
+}
+
+.interactions-table-wrapper tr {
+  display: flex;
+  flex-direction: row;
 }
 
 .modal-shell {
@@ -263,11 +270,6 @@ button.delete-button:hover {
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-.interactions-table-wrapper tr {
-  display: flex;
-  flex-direction: row;
 }
 
 .flash {
