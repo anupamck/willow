@@ -1,4 +1,4 @@
-from routes.db import DatabaseConnector, UserManager, ContactManager
+from routes.db import DatabaseConnector, UserManager
 from dotenv import load_dotenv
 import os
 import sqlite3

@@ -1,8 +1,6 @@
 import sqlite3
 import os
 import bcrypt
-import json
-from cryptography.fernet import Fernet
 
 
 class DatabaseConnector:
@@ -44,8 +42,8 @@ class ContactManager:
                     FROM contacts c
                     LEFT JOIN interactions i ON i.person_id = c.id
                     GROUP BY c.id, c.name, c.frequency
-                    HAVING (JULIANDAY('now') - JULIANDAY(MAX(i.date))) 
-                    >= c.frequency AND c.frequency > 0
+                    HAVING (JULIANDAY('now') - JULIANDAY(MAX(i.date))
+                    >= c.frequency AND c.frequency > 0)
                     ORDER BY c.frequency ASC;'''
         with self.connector as cnx:
             return cnx.execute_query(query)
@@ -157,7 +155,7 @@ class UserManager:
         CREATE TABLE "contacts" (
             "id" INTEGER UNIQUE,
             "name" TEXT,
-            "frequency"	TEXT,
+            "frequency"	INTEGER,
             PRIMARY KEY("id" AUTOINCREMENT)
         );
         '''
