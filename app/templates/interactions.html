@@ -37,7 +37,7 @@
                         href="{{ url_for('interactions.edit_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"><button
                             class="edit-button">Edit</button></a></td>
                 <td><button class="delete-button"
-                        onclick="confirmDeleteInteraction('{{ interaction.id }}', '{{ person_id }}', '{{ contact_name }}')">Delete</button>
+                        onclick='confirmDeleteInteraction("{{ interaction.id }}", "{{ person_id }}", "{{ contact_name }}")'>Delete</button>
                 </td>
             </tr>
             {% endfor %}
