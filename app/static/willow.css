@@ -64,6 +64,9 @@ nav#sidebar {
   padding-right: 30px;
   margin-bottom: 10px;
   position: sticky;
+  position: -webkit-sticky;
+  top: 10px;
+  align-self: flex-start;
 }
 
 nav#sidebar a:link,
