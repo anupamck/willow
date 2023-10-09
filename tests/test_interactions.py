@@ -10,6 +10,7 @@ from flask_login import LoginManager
 from ..app.routes.auth import User
 from flask_login import login_user, logout_user
 import datetime
+from bs4 import BeautifulSoup
 
 
 @pytest.fixture
@@ -129,8 +130,12 @@ def test_not_logged_in_user_redirected_to_login_page(client):
 def test_interactions_template_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/interactions/1/Ashoka')
     assert response.status_code == 200
-    assert b'<h2>Interactions - Ashoka</h2>' in response.data
-    assert b'<table class="interactions-table" aria-label="interactions-table">' in response.data
+    soup = BeautifulSoup(response.data, 'html.parser')
+    h2_tag = soup.find('h2', text='Interactions - Ashoka')
+    assert h2_tag is not None
+    section_tag = soup.find(
+        'section', {'class': 'interactions-table'})
+    assert section_tag is not None, "Expected <section> tag with class 'interactions-table' not found"
 
 
 def test_interactions_are_rendered(authenticated_client, mock_database):
@@ -220,7 +225,11 @@ def test_add_interaction_is_prefilled_with_todays_date(authenticated_client, moc
 def test_no_interactions(authenticated_client, mock_database_no_interactions):
     response = authenticated_client.get('/interactions/1/Ashoka')
     assert response.status_code == 200
-    assert b'<h2>Interactions - Ashoka</h2>' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    heading = soupHtml.find('h2', text='Interactions - Ashoka')
+    assert heading is not None
     assert b"You don't have any interactions" in response.data
-    print(response.data)
-    assert b'To add a new interaction, click <a\n        href="/add_interaction/1/Ashoka">here</a>' in response.data
+    newInteractionLink = soupHtml.find('a', href='/add_interaction/1/Ashoka')
+    assert newInteractionLink is not None
+    assert 'To add a new interaction, click' in newInteractionLink.find_previous(
+        'p').text

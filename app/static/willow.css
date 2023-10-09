@@ -1,7 +1,7 @@
 body {
   margin-left: 10%;
   max-width: 55em;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: large;
   line-height: 1.8em;
   padding-bottom: 2em;
@@ -58,7 +58,6 @@ nav #logout:hover {
   background-color: #238026;
 }
 
-
 nav#sidebar {
   margin-top: 10px;
   padding-right: 30px;
@@ -80,7 +79,6 @@ nav a {
   display: block;
 }
 
-
 a:link,
 a:visited {
   color: #189ad3;
@@ -101,7 +99,6 @@ h2 {
   flex-direction: row;
 }
 
-
 button {
   padding: 10px 15px;
   margin: 10px;
@@ -111,16 +108,16 @@ button {
   background: #1b631e;
   border-radius: 20px;
   font-size: large;
-  color: rgb(201, 198, 198)
+  color: rgb(201, 198, 198);
 }
 
 button:hover {
   background-color: #238026;
 }
 
-button.delete-button {
+button.delete-button,
+.interactions-row button.delete-button {
   background-color: #c3362c;
-  float: right;
   color: white;
 }
 
@@ -137,61 +134,59 @@ nav#sidebar a:hover {
   background-color: #d4d5c6;
 }
 
-table {
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 8px;
-  text-align: left;
-}
-
-th,
-.interactions-table td {
-  border-bottom: 1px solid #ddd;
-}
-
-.interactions-table tbody {
+.interactions-table {
   font-family: Kalam, sans-serif;
 }
 
-td.date {
-  white-space: nowrap;
+.interactions-row .title,
+.interactions-row .date,
+.interactions-row .actions {
+  padding: 8px;
 }
 
-td.title {
-  min-width: 150px;
+.interactions-row .title {
+  text-decoration: underline;
+}
+
+.interactions-row .notes {
+  white-space: pre-line;
+  padding-bottom: 10px;
+}
+
+.interactions-row {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.title-row {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
 }
 
 td.notes {
   white-space: pre-line;
 }
 
-td button {
+.interactions-row button {
   background-color: blue;
   color: white;
   white-space: nowrap;
   font-size: small;
   padding: 3px;
-  margin: 0px;
+  margin: 0px 5px;
   width: 50px;
-  float: right;
   border-radius: 5px;
+  float: none;
 }
 
-td button:hover {
+.interactions-row button:hover {
   background-color: navy;
 }
 
-tr:hover {
-  background-color: #d6d8c5;
-}
-
-tr a:link,
+/* tr a:link,
 tr a:visited {
   text-decoration: none;
-}
+} */
 
 section.table-container table {
   min-width: 45vw;
@@ -298,4 +293,39 @@ section.table-container table {
   color: red;
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+@media screen and (max-width: 1080px) {
+  body {
+    margin-left: 5%;
+    max-width: none;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  nav#sidebar {
+    position: static;
+  }
+
+  nav a {
+    display: inline;
+    padding: 0.25em;
+  }
+
+  img,
+  iframe {
+    max-width: 100%;
+  }
+
+  section.datedRow {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .datedRow .date {
+    margin-bottom: 0.75em;
+  }
 }

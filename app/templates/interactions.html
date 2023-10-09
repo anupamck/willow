@@ -1,48 +1,49 @@
-{% extends 'base.html' %}
-{% block title %}Interactions - {{ contact_name }}{% endblock %}
-{% block head %}
-{{ super() }}
+{% extends 'base.html' %} {% block title %}Interactions - {{ contact_name }}{%
+endblock %} {% block head %} {{ super() }}
 <script src="{{ url_for('static', filename='confirmDeleteInteraction.js') }}"></script>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <h2>Interactions - {{ contact_name }}</h2>
 {% if interactions == [] %}
 <p>You don't have any interactions with {{ contact_name }}.</p>
-<p>To add a new interaction, click <a
-        href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }}">here</a>.
+<p>
+  To add a new interaction, click
+  <a
+    href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }}"
+    >here</a
+  >.
 </p>
 {% else %}
 <div class="button-container">
-    <a href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "><button>Add
-            Interaction</button></a>
+  <a
+    href="{{ url_for('interactions.add_interaction', person_id=person_id, contact_name=contact_name) }} "
+    ><button>Add Interaction</button></a
+  >
 </div>
-<section class="table-container">
-    <table class="interactions-table" aria-label="interactions-table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Title</th>
-                <th>Notes</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for interaction in interactions %}
-            <tr>
-                <td class="date">{{ interaction.date }}</td>
-                <td class="title">{{ interaction.title }}</td>
-                <td class="notes">{{ interaction.notes }}</td>
-                <td><a
-                        href="{{ url_for('interactions.edit_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"><button
-                            class="edit-button">Edit</button></a></td>
-                <td><button class="delete-button"
-                        onclick='confirmDeleteInteraction("{{ interaction.id }}", "{{ person_id }}", "{{ contact_name }}")'>Delete</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<section
+  class="interactions-table"
+  aria-label="interactions-table"
+  role="table"
+>
+  {% for interaction in interactions %}
+  <div class="interactions-row" role="row">
+    <div class="title-row" role="row">
+      <div class="date">{{ interaction.date }}</div>
+      <div class="title">{{ interaction.title }}</div>
+      <div class="actions">
+        <a
+          href="{{ url_for('interactions.edit_interaction', interaction_id=interaction.id, person_id=person_id, contact_name=contact_name) }}"
+          ><button class="edit-button">Edit</button></a
+        >
+        <button
+          class="delete-button"
+          onclick='confirmDeleteInteraction("{{ interaction.id }}", "{{ person_id }}", "{{ contact_name }}")'
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+    <div class="notes" role="row">{{ interaction.notes }}</div>
+  </div>
+  {% endfor %}
 </section>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}
