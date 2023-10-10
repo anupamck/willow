@@ -2,7 +2,7 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 
-<div class="login-wrapper">
+<div id="login-wrapper">
     <section class="login-form">
         <h2>Login</h2>
         <form action="{{ url_for('auth.login')}}" method="POST">
@@ -25,5 +25,4 @@
     </div>
 </div>
 {% endblock %}
-
 </html>

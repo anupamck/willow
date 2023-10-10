@@ -1,40 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='willow.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='willow.css') }}"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Willow - {% block title %}{% endblock %}</title>
-    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icon.png') }}" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam">
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='icon.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Kalam"
+    />
     {% endblock %}
-</head>
+  </head>
 
-<body>
+  <body>
     <nav class="topbar">
-        <div class="center">
-            <h1>Willow</h1>
-        </div>
-        {% if current_user.is_authenticated %}
-        <div class="right">
-            <p id="username">{{ current_user.username }}</p>
-            <a href="{{ url_for('auth.logout') }}"><button id="logout">Logout</button></a>
-        </div>
-        {% endif %}
+      <div class="center">
+        <h1>Willow</h1>
+      </div>
+      {% if current_user.is_authenticated %}
+      <div class="right">
+        <p id="username">{{ current_user.username }}</p>
+        <a href="{{ url_for('auth.logout') }}"
+          ><button id="logout">Logout</button></a
+        >
+      </div>
+      {% endif %}
     </nav>
     <div class="wrapper">
-        {% if current_user.is_authenticated %}
-        <nav id="sidebar">
-            <a href="{{ url_for('home.get_home') }}">home</a>
-            <a href="{{ url_for('contacts.get_contacts') }}">contacts</a>
-        </nav>
-        {% endif %}
-        <section class="main">
-            {% block content %}{% endblock %}
-        </section>
-
+      {% if current_user.is_authenticated %}
+      <nav id="sidebar">
+        <a href="{{ url_for('home.get_home') }}">home</a>
+        <a href="{{ url_for('contacts.get_contacts') }}">contacts</a>
+      </nav>
+      {% endif %}
+      <section class="main">{% block content %}{% endblock %}</section>
     </div>
-</body>
-
+  </body>
 </html>
