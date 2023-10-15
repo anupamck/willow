@@ -102,7 +102,6 @@ h2 {
 button {
   padding: 10px 15px;
   margin: 10px;
-  margin-bottom: 25px;
   border: none;
   cursor: pointer;
   background: #1b631e;
@@ -129,6 +128,10 @@ button.delete-button:hover,
 .button-container {
   display: flex;
   justify-content: flex-end;
+}
+
+.button-container button {
+  margin-bottom: 25px;
 }
 
 nav#sidebar a:hover {
@@ -191,8 +194,36 @@ tr a:visited {
 }
 
 .title-row {
-  display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-row .date {
+  flex-basis: auto;
+  margin-right: 1rem;
+  flex-grow: 0;
+}
+
+.title-row .title {
+  flex: 1;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.title-row .actions {
+  display: flex;
+  flex-grow: 0;
+}
+
+.date,
+.title,
+.actions {
+  flex: 1;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
 }
 
 td.notes {
@@ -206,10 +237,13 @@ td button {
   white-space: nowrap;
   font-size: small;
   padding: 3px;
-  margin: 0px 5px;
   width: 50px;
   border-radius: 5px;
   float: none;
+}
+
+td button {
+  margin: 0px 5px;
 }
 
 .interactions-row button:hover {
@@ -303,6 +337,11 @@ td button {
   /* Could be more or less, depending on screen size */
 }
 
+.modal-content textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* The Close Button */
 .close {
   color: #aaa;
@@ -324,15 +363,21 @@ td button {
   margin-bottom: 10px;
 }
 
+th.frequency-heading::before {
+  content: "Frequency (days)";
+  font-size: 20px;
+  display: inline-block;
+}
+
 @media screen and (max-width: 1080px) {
   body {
     margin-left: 5%;
     max-width: none;
   }
-  /* .wrapper {
+  .wrapper {
     display: flex;
     flex-direction: column;
-  } */
+  }
 
   nav#sidebar {
     position: static;
@@ -340,11 +385,43 @@ td button {
 
   nav a {
     display: inline;
-    padding: 0.25em;
   }
 
   img {
     max-width: 100%;
+  }
+
+  .title-row {
+    display: grid;
+    grid-template-areas:
+      "date actions"
+      "title title";
+  }
+
+  .date {
+    grid-area: date;
+  }
+
+  .title {
+    grid-area: title;
+  }
+
+  .actions {
+    grid-area: actions;
+  }
+
+  .modal-content {
+    width: auto;
+    margin-right: 5%;
+  }
+
+  th,
+  td {
+    padding: 6px;
+  }
+
+  th.frequency-heading::before {
+    content: "Freq (days)";
   }
 }
 

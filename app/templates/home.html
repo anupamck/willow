@@ -1,27 +1,37 @@
-{% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block content %}
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
 
 <h2>Long time no speak</h2>
 {% if contacts == [] %}
 <p>Congratulations! You are all caught up.</p>
-<img src="{{ url_for('static', filename='celebrate.png') }}" alt="A more colourful willow tree" class="celebrate-image">
-<p>To add more contacts, click <a href="{{ url_for('contacts.add_contact') }}">here</a>.</p>
+<img
+  src="{{ url_for('static', filename='celebrate.png') }}"
+  alt="A more colourful willow tree"
+  class="celebrate-image"
+/>
+<p>
+  To add more contacts, click
+  <a href="{{ url_for('contacts.add_contact') }}">here</a>.
+</p>
 {% else %}
 <section class="table-container">
   <table aria-label="home-table">
     <thead>
       <tr>
         <th>Name</th>
-        <th>Frequency (days)</th>
+        <th class="frequency-heading"></th>
         <th>Last Interaction</th>
       </tr>
     </thead>
     <tbody>
       {% for contact in contacts %}
       <tr>
-        <td><a href="{{ url_for('interactions.get_interactions', person_id=contact.id, contact_name=contact.name) }}">{{
-            contact.name }}</a></td>
+        <td>
+          <a
+            href="{{ url_for('interactions.get_interactions', person_id=contact.id, contact_name=contact.name) }}"
+            >{{ contact.name }}</a
+          >
+        </td>
         <td>{{ contact.frequency }}</td>
         <td class="date">{{ contact.last_interaction }}</td>
       </tr>
@@ -29,5 +39,4 @@
     </tbody>
   </table>
 </section>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}
