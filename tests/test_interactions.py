@@ -131,7 +131,7 @@ def test_interactions_template_is_rendered(authenticated_client, mock_database):
     response = authenticated_client.get('/interactions/1/Ashoka')
     assert response.status_code == 200
     soup = BeautifulSoup(response.data, 'html.parser')
-    h2_tag = soup.find('h2', text='Interactions - Ashoka')
+    h2_tag = soup.find('h2', string='Interactions - Ashoka')
     assert h2_tag is not None
     section_tag = soup.find(
         'section', {'class': 'interactions-table'})
@@ -226,7 +226,7 @@ def test_no_interactions(authenticated_client, mock_database_no_interactions):
     response = authenticated_client.get('/interactions/1/Ashoka')
     assert response.status_code == 200
     soupHtml = BeautifulSoup(response.data, 'html.parser')
-    heading = soupHtml.find('h2', text='Interactions - Ashoka')
+    heading = soupHtml.find('h2', string='Interactions - Ashoka')
     assert heading is not None
     assert b"You don't have any interactions" in response.data
     newInteractionLink = soupHtml.find('a', href='/add_interaction/1/Ashoka')

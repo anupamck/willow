@@ -8,6 +8,7 @@ from ..app.routes.db import ContactManager
 from flask_login import LoginManager
 from ..app.routes.auth import User
 from flask_login import login_user, logout_user
+from bs4 import BeautifulSoup
 
 
 @pytest.fixture
@@ -129,7 +130,14 @@ def test_overdue_contacts_are_rendered(authenticated_client, mock_database):
 def test_no_overdue_contacts(authenticated_client, mock_database_no_overdue_contacts):
     # Make assertions based on the mocked data
     response = authenticated_client.get('/home')
+    print(response.data)
     assert response.status_code == 200
     assert b'Congratulations! You are all caught up.' in response.data
-    assert b'<img src="/static/celebrate.png" alt="A more colourful willow tree" class="celebrate-image">' in response.data
-    assert b'To add more contacts, click <a href="/add_contact">here' in response.data
+    soupHTML = BeautifulSoup(response.data, 'html.parser')
+    celebrateImg = soupHTML.find('img', src='/static/celebrate.png')
+    assert celebrateImg is not None
+    assert celebrateImg['alt'] == 'A more colourful willow tree'
+    addContactLink = soupHTML.find('a', href='/add_contact')
+    assert addContactLink is not None
+    assert 'To add more contacts, click' in addContactLink.find_previous(
+        'p').text
