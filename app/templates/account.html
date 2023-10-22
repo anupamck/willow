@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Account{% endblock %}
 {% block content %}
+{% block head %}
+{{ super() }}
+<script src="{{ url_for('static', filename='confirmDeleteUser.js') }}"></script>
+{% endblock %}
 
 <div id="login-wrapper">
     <section class="login-form">
@@ -12,11 +16,14 @@
             {{ message }}
             {% endfor %}
         </div>
-        
+
         <!--Link the Change password button to the form using the router -->
         <a href="{{ url_for('account.change_password') }}"><button>Change Password</button></a>
-        <button class="delete-button">Delete Account</button>
+        <button class="delete-button" onclick="confirmDeleteUser('{{ current_user.username }}')">Delete Account</button>
+        <form id="deleteUserForm" action="{{ url_for('account.delete_user') }}" method="POST" style="display: none;">
+        </form>
     </section>
 </div>
 {% endblock %}
+
 </html>

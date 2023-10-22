@@ -5,9 +5,9 @@ import sqlite3
 
 load_dotenv()
 
-username = 'kalaikovan'
+username = 'ashoka'
 password = os.getenv('NEW_USER_PASSWORD')
-email = 'kalai.march90@gmail.com'
+email = 'ashoka@maghada.com'
 
 users_db = os.path.join(os.getenv('DB_PATH'), "users.db")
 db_path = os.path.join(os.getenv('DB_PATH'), username + '.db')

@@ -11,6 +11,7 @@ from flask_login import login_user, logout_user
 from bs4 import BeautifulSoup
 from ..app.routes.db import UserManager
 import bcrypt
+import os
 
 
 @pytest.fixture
@@ -81,10 +82,21 @@ def mock_user_details(mocker):
                         return_value=user_details_ashoka)
 
 
+@pytest.fixture
+def mock_delete_user_database(mocker):
+    mocker.patch.object(os, 'remove',
+                        return_value=None)
+
+
+@pytest.fixture
+def mock_delete_user(mocker):
+    mocker.patch.object(UserManager, 'delete_user',
+                        return_value=None)
+
+
 def test_user_account_template_is_rendered(authenticated_client):
     response = authenticated_client.get(
         '/account', follow_redirects=True)
-    print(response.data)
     assert response.status_code == 200
     assert b'User Account' in response.data
     assert b'Username: ashoka' in response.data
@@ -124,7 +136,7 @@ def test_error_thrown_when_new_passwords_do_not_match(authenticated_client):
                     'confirm_password': 'new_password1'}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
-    # assert response.status_code == 200
+    assert response.status_code == 200
     assert b'New password and confirm new password must match' in response.data
 
 
@@ -134,7 +146,7 @@ def test_error_thrown_when_form_submitted_without_new_password(authenticated_cli
                     'confirm_password': 'new_password'}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
-    # assert response.status_code == 200
+    assert response.status_code == 200
     assert b'New password is required' in response.data
 
 
@@ -144,7 +156,7 @@ def test_error_thrown_when_form_submitted_without_confirm_password(authenticated
                     'confirm_password': ''}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
-    # assert response.status_code == 200
+    assert response.status_code == 200
     assert b'Confirm new password is required' in response.data
 
 
@@ -164,13 +176,13 @@ def test_user_can_change_password(authenticated_client, mock_user_details):
                     'confirm_password': 'new_password'}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
-    print(response.data)
     assert response.status_code == 200
     assert b'Password changed successfully' in response.data
 
 
-# def test_user_can_delete_their_account(client):
-#     response = client.post('/account/delete', follow_redirects=True)
-#     assert response.status_code == 200
-#     assert b'Login' in response.data
-#     assert b'Account deleted successfully' in response.data
+def test_user_can_delete_their_account(authenticated_client, mock_delete_user, mock_delete_user_database):
+    response = authenticated_client.post(
+        '/delete_user', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Login' in response.data
+    assert b'Account deleted successfully' in response.data

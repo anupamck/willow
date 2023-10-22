@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from ..routes.db import DatabaseConnector, UserManager
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from ..routes.auth import User
 import os
 
@@ -55,3 +55,22 @@ def change_password():
                     error = 'Current password is incorrect.'
                     flash(error)
                     return render_template('changePasswordForm.html')
+
+
+@account_bp.route('/delete_user', methods=['POST'])
+@login_required
+def delete_user():
+    if request.method == 'POST':
+        with DatabaseConnector(database=users_db) as connector:
+            # Delete user from users table
+            user_manager = UserManager(connector)
+            user_manager.delete_user(current_user.username)
+
+            # Delete user database file
+            db_path = os.path.join(os.getenv('DB_PATH'),
+                                   current_user.username + '.db')
+            os.remove(db_path)
+
+            flash('Account deleted successfully.')
+            logout_user()
+            return redirect(url_for('auth.login'))
