@@ -31,6 +31,7 @@ class User(UserMixin):
                 user.password = user_details['password']
                 user.salt = user_details['salt']
                 user.database = user_details['database']
+                user.email = user_details['email']
                 return user
             return None
 

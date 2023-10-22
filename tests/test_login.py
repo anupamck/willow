@@ -3,6 +3,7 @@ from ..app.routes.auth import auth_bp
 from ..app.routes.home import home_bp
 from ..app.routes.contacts import contacts_bp
 from ..app.routes.interactions import interactions_bp
+from ..app.routes.account import account_bp
 import pytest
 from ..app.routes.db import UserManager, ContactManager
 import bcrypt
@@ -17,6 +18,7 @@ def app():
     app.register_blueprint(home_bp)
     app.register_blueprint(contacts_bp)
     app.register_blueprint(interactions_bp)
+    app.register_blueprint(account_bp)
     app.config['TESTING'] = True
     app.secret_key = 'test'
 
@@ -26,7 +28,6 @@ def app():
 
     # Configure the login view and endpoint
     login_manager.login_view = 'auth.login'
-    login_manager.login_message = 'Please log in to access this page.'
 
     @login_manager.user_loader
     def load_user(user):

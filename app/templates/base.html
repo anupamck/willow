@@ -40,6 +40,7 @@
       <nav id="sidebar">
         <a href="{{ url_for('home.get_home') }}">home</a>
         <a href="{{ url_for('contacts.get_contacts') }}">contacts</a>
+        <a href="{{ url_for('account.get_account_details') }}">account</a>
       </nav>
       {% endif %}
       <section class="main">{% block content %}{% endblock %}</section>

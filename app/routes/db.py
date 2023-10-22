@@ -202,3 +202,16 @@ class UserManager:
             password_enc = bcrypt.hashpw(
                 password.encode('utf-8'), user['salt'])
             return password_enc == user['password']
+
+    def change_password(self, username, new_password):
+        user = self.get_user(username)
+        if user is None:
+            raise Exception('User not found')
+        salt = bcrypt.gensalt()
+        password_enc = bcrypt.hashpw(
+            new_password.encode('utf-8'), salt)
+        query = 'UPDATE users SET password = ?, salt = ? WHERE username = ?'
+        params = (password_enc, salt, username)
+        with self.connector as cnx:
+            cnx.execute_query(query, params)
+            cnx.connection.commit()

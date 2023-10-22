@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Account{% endblock %}
+{% block content %}
+
+<div id="login-wrapper">
+    <section class="login-form">
+        <h2>User Account</h2>
+        <p>Username: {{ current_user.username }}</p>
+        <p>E-mail: {{ current_user.email }}</p>
+        <div class="flash">
+            {% for message in get_flashed_messages() %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        
+        <!--Link the Change password button to the form using the router -->
+        <a href="{{ url_for('account.change_password') }}"><button>Change Password</button></a>
+        <button class="delete-button">Delete Account</button>
+    </section>
+</div>
+{% endblock %}
+</html>

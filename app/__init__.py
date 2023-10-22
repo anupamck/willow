@@ -2,6 +2,7 @@ from flask import Flask
 from .routes.home import home_bp
 from .routes.contacts import contacts_bp
 from .routes.interactions import interactions_bp
+from .routes.account import account_bp
 from .routes.auth import auth_bp, User
 from flask_cors import CORS
 import os
@@ -16,6 +17,7 @@ app.register_blueprint(home_bp)
 app.register_blueprint(contacts_bp)
 app.register_blueprint(interactions_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(account_bp)
 CORS(app)
 
 login_manager = LoginManager()
