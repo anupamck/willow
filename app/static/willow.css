@@ -297,6 +297,10 @@ td button {
   min-width: 180px;
 }
 
+.change-password-form .form-group label {
+  min-width: 220px;
+}
+
 .interaction-form .form-group label {
   min-width: 100px;
 }
