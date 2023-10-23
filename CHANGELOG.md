@@ -1,5 +1,11 @@
 # Changelog
 
+## 2023-10-23
+
+- Users can change password
+- New users can register on the app
+- Users can delete their accounts
+
 ## 2023-10-15
 
 - The app is now responsive, and can be used on smaller screens
