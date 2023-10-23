@@ -215,3 +215,13 @@ class UserManager:
         with self.connector as cnx:
             cnx.execute_query(query, params)
             cnx.connection.commit()
+
+    def is_email_id_already_registered(self, email_id):
+        query = 'SELECT * FROM users WHERE email = ?'
+        params = (email_id,)
+        with self.connector as cnx:
+            user_details_array = cnx.execute_query(query, params)
+            if len(user_details_array) == 0:
+                return False
+            else:
+                return True

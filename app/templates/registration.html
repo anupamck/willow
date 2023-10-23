@@ -1,0 +1,33 @@
+<!-- Write me a template for registration, that is analogous to the login template I have opened alongside -->
+
+{% extends "base.html" %}
+{% block title %}Registration{% endblock %}
+{% block content %}
+
+<div class="modal-shell" id="modal-shell">
+    <div class="modal-content">
+        <a href="{{ url_for('auth.login') }}"><span class="close" id="close-modal">&times;</span></a>
+        <h2>Registration</h2>
+        <div class="registration-form">
+            <form action="{{ url_for('auth.register') }}" method="POST">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" id="username" required /><br><br>
+                    <label for="email">E-mail:</label>
+                    <input type="email" name="email" id="email" required /><br><br>
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" required /><br><br>
+                    <label for="confirm_password">Confirm password:</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required /><br><br>
+                </div>
+                <div class="flash-error">
+                    {% for message in get_flashed_messages(with_categories=False, category_filter=('error')) %}
+                    {{ message }}
+                    {% endfor %}
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

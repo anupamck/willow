@@ -7,8 +7,9 @@ from ..app.routes.account import account_bp
 import pytest
 from ..app.routes.db import UserManager, ContactManager
 import bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, logout_user
 from ..app.routes.auth import User
+from bs4 import BeautifulSoup
 
 
 @pytest.fixture
@@ -93,6 +94,21 @@ def mock_overdue_contacts(mocker):
                         return_value=database_response)
 
 
+@pytest.fixture
+def authenticated_client(client):
+    # Create a fixture to set up an authenticated client with a logged-in user
+    with client.application.test_request_context():
+        # Perform the login within the request context
+        user = User('ashoka')
+        user.username = 'ashoka'
+        login_user(user)
+
+        yield client
+
+        # Perform any necessary cleanup after the test
+        logout_user()
+
+
 def test_login_template_is_rendered(client):
     response = client.get('/')
     assert response.status_code == 200
@@ -100,6 +116,11 @@ def test_login_template_is_rendered(client):
     assert b'<form action="/" method="POST">' in response.data
     assert b'<label for="username">Username:</label>' in response.data
     assert b'<label for="password">Password:</label>' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    login_button = soupHtml.find('button', string='Login')
+    assert login_button is not None
+    register_button = soupHtml.find('button', string='Register')
+    assert register_button is not None
 
 
 def test_submitting_incomplete_login_form_flashes_error(client):
@@ -129,5 +150,11 @@ def test_submitting_incorrect_password_flashes_error(client, mock_user_details):
 def test_submitting_correct_username_and_password_redirects_user_to_home(client, mock_user_details, mock_overdue_contacts):
     request_data = {'username': 'ashoka', 'password': 'testPassword'}
     response = client.post('/', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h2>Long time no speak</h2>' in response.data
+
+
+def test_logged_in_user_is_redirected_to_homepage(authenticated_client):
+    response = authenticated_client.get('/', follow_redirects=True)
     assert response.status_code == 200
     assert b'<h2>Long time no speak</h2>' in response.data

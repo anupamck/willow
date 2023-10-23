@@ -40,7 +40,7 @@ def change_password():
             error = 'New password and confirm new password must match.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
             return render_template('changePasswordForm.html')
 
         else:
@@ -49,11 +49,11 @@ def change_password():
                 if user_manager.is_password_correct(current_user.username, current_password):
                     user_manager.change_password(
                         current_user.username, new_password)
-                    flash('Password changed successfully.')
+                    flash('Password changed successfully.', 'success')
                     return redirect(url_for('account.get_account_details'))
                 else:
                     error = 'Current password is incorrect.'
-                    flash(error)
+                    flash(error, 'error')
                     return render_template('changePasswordForm.html')
 
 
@@ -71,6 +71,6 @@ def delete_user():
                                    current_user.username + '.db')
             os.remove(db_path)
 
-            flash('Account deleted successfully.')
+            flash('Account deleted successfully.', 'success')
             logout_user()
             return redirect(url_for('auth.login'))

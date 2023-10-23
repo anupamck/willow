@@ -46,7 +46,7 @@ def add_interaction(person_id, contact_name):
             error = 'Title and notes are required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
             return render_template('interactionForm.html', person_id=person_id, contact_name=contact_name, form_type='add')
 
         else:
@@ -86,7 +86,7 @@ def edit_interaction(interaction_id, person_id, contact_name):
             error = 'Title and notes are required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
             with DatabaseConnector(user.database) as connector:
                 interaction_manager = InteractionManager(connector)
                 interaction = interaction_manager.get_interaction(

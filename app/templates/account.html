@@ -6,24 +6,27 @@
 <script src="{{ url_for('static', filename='confirmDeleteUser.js') }}"></script>
 {% endblock %}
 
-<div id="login-wrapper">
-    <section class="login-form">
-        <h2>User Account</h2>
-        <p>Username: {{ current_user.username }}</p>
-        <p>E-mail: {{ current_user.email }}</p>
-        <div class="flash">
-            {% for message in get_flashed_messages() %}
-            {{ message }}
-            {% endfor %}
-        </div>
+<section class="account">
+    <h2>User Account</h2>
+    <p>Username: {{ current_user.username }}</p>
+    <p>E-mail: {{ current_user.email }}</p>
+    <div class="flash-success">
+        {% for message in get_flashed_messages(with_categories=False, category_filter=('success')) %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    <div class="flash-error">
+        {% for message in get_flashed_messages(with_categories=False, category_filter=('error')) %}
+        {{ message }}
+        {% endfor %}
+    </div>
 
-        <!--Link the Change password button to the form using the router -->
-        <a href="{{ url_for('account.change_password') }}"><button>Change Password</button></a>
-        <button class="delete-button" onclick="confirmDeleteUser('{{ current_user.username }}')">Delete Account</button>
-        <form id="deleteUserForm" action="{{ url_for('account.delete_user') }}" method="POST" style="display: none;">
-        </form>
-    </section>
-</div>
+    <!--Link the Change password button to the form using the router -->
+    <a href="{{ url_for('account.change_password') }}"><button>Change Password</button></a>
+    <button class="delete-button" onclick="confirmDeleteUser('{{ current_user.username }}')">Delete Account</button>
+    <form id="deleteUserForm" action="{{ url_for('account.delete_user') }}" method="POST" style="display: none;">
+    </form>
+</section>
 {% endblock %}
 
 </html>

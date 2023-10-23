@@ -41,8 +41,8 @@
         </div>
       </form>
       {% endif %}
-      <div class="flash">
-        {% for message in get_flashed_messages() %}
+      <div class="flash-error">
+        {% for message in get_flashed_messages(with_categories=False, category_filter=('error')) %}
         {{ message }}
         {% endfor %}
       </div>

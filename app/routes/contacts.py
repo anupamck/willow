@@ -41,7 +41,7 @@ def add_contact():
             error = 'Frequency is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
             return render_template('contactForm.html', form_type='add')
 
         else:
@@ -75,7 +75,7 @@ def edit_contact(person_id):
             error = 'Frequency is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
             with DatabaseConnector(user.database) as connector:
                 contact_manager = ContactManager(connector)
                 contact = contact_manager.get_contact(person_id)

@@ -12,12 +12,18 @@
                 <label for="password">Password:</label>
                 <input type="password" name="password" required aria-label="password"><br><br>
             </div>
-            <div class="flash">
-                {% for message in get_flashed_messages() %}
+            <div class="flash-success">
+                {% for message in get_flashed_messages(with_categories=False, category_filter=('success')) %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            <div class="flash-error">
+                {% for message in get_flashed_messages(with_categories=False, category_filter=('error')) %}
                 {{ message }}
                 {% endfor %}
             </div>
             <button type="submit">Login</button>
+            <a href="{{ url_for('auth.register') }}"><button id="register_button" type="button">Register</button></a>
         </form>
     </section>
     <div class="logo-image">
@@ -25,4 +31,5 @@
     </div>
 </div>
 {% endblock %}
+
 </html>

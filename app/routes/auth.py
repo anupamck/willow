@@ -8,6 +8,7 @@ from urllib.parse import urlparse, urljoin
 import datetime
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
@@ -55,7 +56,7 @@ def login():
             error = 'Password is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
             return render_template('login.html')
 
         with DatabaseConnector(database=users_db) as connector:
@@ -90,3 +91,59 @@ def is_safe_url(target):
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and \
         parsed_host_url.netloc == test_url.netloc
+
+
+@auth_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home.get_home'))
+
+    if request.method == 'GET':
+        return render_template('registration.html')
+
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        confirm_password = request.form['confirm_password']
+
+        # Write me a regex pattern to match emails
+        email_pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
+        error = None
+        if not username:
+            error = 'Username is required.'
+        elif not email:
+            error = 'E-mail is required.'
+        # Write me a regex to validate email addresses
+        elif not re.match(email_pattern, email):
+            error = 'E-mail is invalid.'
+        elif not password:
+            error = 'Password is required.'
+        elif password != confirm_password:
+            error = 'Password and confirm password must match.'
+
+        if error is not None:
+            flash(error, 'error')
+            return render_template('registration.html')
+
+        with DatabaseConnector(database=users_db) as connector:
+            user_manager = UserManager(connector)
+            if user_manager.get_user(username) is not None:
+                error = 'Username is already taken.'
+            elif user_manager.is_email_id_already_registered(email):
+                error = 'This e-mail address is already registered.'
+
+            if error is not None:
+                flash(error, 'error')
+                return render_template('registration.html')
+            else:
+                user_manager.add_user(username, password,
+                                      email, username + ".db")
+            new_user_db_path = os.path.join(
+                os.getenv('DB_PATH'), username + '.db')
+            with DatabaseConnector(database=new_user_db_path) as connector:
+                user_manager = UserManager(connector)
+                user_manager.initialize_user_db()
+            flash('Account created successfully. Please login.', 'success')
+            return redirect(url_for('auth.login'))

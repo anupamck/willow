@@ -293,7 +293,8 @@ td button {
   vertical-align: top;
 }
 
-.contact-form .form-group label {
+.contact-form .form-group label,
+.registration-form .form-group label {
   min-width: 180px;
 }
 
@@ -361,10 +362,15 @@ td button {
   cursor: pointer;
 }
 
-.flash {
+.flash-error,
+.flash-success {
   color: red;
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.flash-success {
+  color: #1b631e;
 }
 
 th.frequency-heading::before {
