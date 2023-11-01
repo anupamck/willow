@@ -116,7 +116,6 @@ def test_change_password_form_is_rendered(authenticated_client):
     assert response.status_code == 200
     assert b'Current password' in response.data
     assert b'New password' in response.data
-    assert b'Confirm new password' in response.data
     soupHtml = BeautifulSoup(response.data, 'html.parser')
     change_password_button = soupHtml.find('button', string='Change Password')
     assert change_password_button is not None
@@ -124,8 +123,7 @@ def test_change_password_form_is_rendered(authenticated_client):
 
 def test_error_thrown_when_form_submitted_without_current_password(authenticated_client):
     request_data = {'current_password': '',
-                    'new_password': 'new_password',
-                    'confirm_password': 'new_password'}
+                    'new_password': 'new_password'}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
@@ -135,23 +133,9 @@ def test_error_thrown_when_form_submitted_without_current_password(authenticated
     assert 'Current password is required' in error_message.string
 
 
-def test_error_thrown_when_new_passwords_do_not_match(authenticated_client):
-    request_data = {'current_password': 'password',
-                    'new_password': 'new_password',
-                    'confirm_password': 'new_password1'}
-    response = authenticated_client.post(
-        '/change_password', data=request_data, follow_redirects=True)
-    assert response.status_code == 200
-    soupHtml = BeautifulSoup(response.data, 'html.parser')
-    error_message = soupHtml.find('div', class_='flash-error')
-    assert error_message is not None
-    assert 'New password and confirm new password must match' in error_message.string
-
-
 def test_error_thrown_when_form_submitted_without_new_password(authenticated_client):
     request_data = {'current_password': 'password',
-                    'new_password': '',
-                    'confirm_password': 'new_password'}
+                    'new_password': ''}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
@@ -161,23 +145,9 @@ def test_error_thrown_when_form_submitted_without_new_password(authenticated_cli
     assert 'New password is required' in error_message.string
 
 
-def test_error_thrown_when_form_submitted_without_confirm_password(authenticated_client):
-    request_data = {'current_password': 'password',
-                    'new_password': 'new_password',
-                    'confirm_password': ''}
-    response = authenticated_client.post(
-        '/change_password', data=request_data, follow_redirects=True)
-    assert response.status_code == 200
-    soupHtml = BeautifulSoup(response.data, 'html.parser')
-    error_message = soupHtml.find('div', class_='flash-error')
-    assert error_message is not None
-    assert 'Confirm new password is required' in error_message.string
-
-
 def test_error_thrown_when_old_password_is_incorrect(authenticated_client,  mock_user_details):
     request_data = {'current_password': 'password',
-                    'new_password': 'new_password',
-                    'confirm_password': 'new_password'}
+                    'new_password': 'new_password'}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
@@ -189,8 +159,7 @@ def test_error_thrown_when_old_password_is_incorrect(authenticated_client,  mock
 
 def test_user_can_change_password(authenticated_client, mock_user_details):
     request_data = {'current_password': 'testPassword',
-                    'new_password': 'new_password',
-                    'confirm_password': 'new_password'}
+                    'new_password': 'new_password'}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200

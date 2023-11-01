@@ -27,17 +27,12 @@ def change_password():
         # Get the form data
         current_password = request.form['current_password']
         new_password = request.form['new_password']
-        confirm_password = request.form['confirm_password']
 
         error = None
         if not current_password:
             error = 'Current password is required.'
         elif not new_password:
             error = 'New password is required.'
-        elif not confirm_password:
-            error = 'Confirm new password is required.'
-        elif new_password != confirm_password:
-            error = 'New password and confirm new password must match.'
 
         if error is not None:
             flash(error, 'error')
@@ -74,10 +69,3 @@ def delete_user():
             flash('Account deleted successfully.', 'success')
             logout_user()
             return redirect(url_for('auth.login'))
-
-
-# Outgoing server: smtp.titan.email
-
-# Port: 465
-
-# Encryption method: SSL/TLS

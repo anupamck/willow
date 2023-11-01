@@ -124,8 +124,8 @@ def test_logged_in_user_is_redirected_to_home_page(authenticated_client):
 
 def test_error_is_displayed_when_username_is_blank(client):
     # Test that an error is thrown when the username is blank
-    request_data = {'username': '', 'password': 'testPassword',
-                    'confirm_password': 'testPassword', 'email': 'test@email.com'}
+    request_data = {'username': '',
+                    'password': 'testPassword', 'email': 'test@email.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
     soupHtml = BeautifulSoup(response.data, 'html.parser')
@@ -135,8 +135,8 @@ def test_error_is_displayed_when_username_is_blank(client):
 
 
 def test_error_is_displayed_when_email_is_blank(client):
-    request_data = {'username': 'testUser', 'password': 'testPassword',
-                    'confirm_password': 'testPassword', 'email': ''}
+    request_data = {'username': 'testUser',
+                    'password': 'testPassword', 'email': ''}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
     soupHtml = BeautifulSoup(response.data, 'html.parser')
@@ -146,8 +146,8 @@ def test_error_is_displayed_when_email_is_blank(client):
 
 
 def test_error_is_displayed_when_email_is_invalid(client):
-    request_data = {'username': 'testUser', 'password': 'testPassword',
-                    'confirm_password': 'testPassword', 'email': 'testemail.com'}
+    request_data = {'username': 'testUser',
+                    'password': 'testPassword', 'email': 'testemail.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
     soupHtml = BeautifulSoup(response.data, 'html.parser')
@@ -157,8 +157,8 @@ def test_error_is_displayed_when_email_is_invalid(client):
 
 
 def test_error_is_displayed_when_password_is_blank(client):
-    request_data = {'username': 'testUser', 'password': '',
-                    'confirm_password': 'testPassword', 'email': 'test@email.com'}
+    request_data = {'username': 'testUser',
+                    'password': '', 'email': 'test@email.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
     soupHtml = BeautifulSoup(response.data, 'html.parser')
@@ -167,20 +167,9 @@ def test_error_is_displayed_when_password_is_blank(client):
     assert 'Password is required' in error_message.string
 
 
-def test_error_is_displayed_when_passwords_do_not_match(client):
-    request_data = {'username': 'testUser', 'password': 'testPassword',
-                    'confirm_password': 'testPassword2', 'email': 'test@mail.com'}
-    response = client.post('/register', data=request_data)
-    assert response.status_code == 200
-    soupHtml = BeautifulSoup(response.data, 'html.parser')
-    error_message = soupHtml.find('div', class_='flash-error')
-    assert error_message is not None
-    assert 'Password and confirm password must match' in error_message.string
-
-
 def test_error_is_displayed_when_username_already_exists(client, mock_user):
     request_data = {'username': 'mockUser', 'password': 'testPassword',
-                    'confirm_password': 'testPassword', 'email': 'test@mail.com'}
+                    'email': 'test@mail.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
     soupHtml = BeautifulSoup(response.data, 'html.parser')
@@ -191,7 +180,7 @@ def test_error_is_displayed_when_username_already_exists(client, mock_user):
 
 def test_error_is_displayed_when_email_already_registered(client, mock_email_registered):
     request_data = {'username': 'ashoka2', 'password': 'testPassword',
-                    'confirm_password': 'testPassword', 'email': 'mock@email.com'}
+                    'email': 'mock@email.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
     soupHtml = BeautifulSoup(response.data, 'html.parser')
@@ -203,7 +192,7 @@ def test_error_is_displayed_when_email_already_registered(client, mock_email_reg
 
 def test_user_can_register_and_is_redirected_to_login(client, mock_add_user):
     request_data = {'username': 'testUser', 'password': 'testPassword',
-                    'confirm_password': 'testPassword', 'email': 'mock@email.com'}
+                    'email': 'mock@email.com'}
     response = client.post(
         '/register', data=request_data, follow_redirects=True)
     assert response.status_code == 200

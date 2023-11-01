@@ -128,7 +128,6 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        confirm_password = request.form['confirm_password']
 
         # Write me a regex pattern to match emails
         email_pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
@@ -143,8 +142,6 @@ def register():
             error = 'E-mail is invalid.'
         elif not password:
             error = 'Password is required.'
-        elif password != confirm_password:
-            error = 'Password and confirm password must match.'
 
         if error is not None:
             flash(error, 'error')

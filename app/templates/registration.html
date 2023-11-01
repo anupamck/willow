@@ -17,8 +17,6 @@
                     <input type="email" name="email" id="email" required /><br><br>
                     <label for="password">Password:</label>
                     <input type="password" name="password" id="password" required /><br><br>
-                    <label for="confirm_password">Confirm password:</label>
-                    <input type="password" name="confirm_password" id="confirm_password" required /><br><br>
                 </div>
                 <div class="flash-error">
                     {% for message in get_flashed_messages(with_categories=False, category_filter=('error')) %}
