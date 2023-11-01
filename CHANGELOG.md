@@ -1,5 +1,9 @@
 # Changelog
 
+## 2023-11-01
+
+- Users can reset password
+
 ## 2023-10-23
 
 - Users can change password
