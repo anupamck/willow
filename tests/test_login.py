@@ -173,7 +173,10 @@ def test_submitting_incomplete_login_form_flashes_error(client):
     response = client.post('/', data=request_data)
     assert response.status_code == 200
     assert b'<h2>Login</h2>' in response.data
-    assert b'Username is required.' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Username is required.' in error_message.string
 
 
 def test_submitting_incorrect_username_flashes_error(client, mock_user_details):
@@ -181,7 +184,10 @@ def test_submitting_incorrect_username_flashes_error(client, mock_user_details):
     response = client.post('/', data=request_data)
     assert response.status_code == 200
     assert b'<h2>Login</h2>' in response.data
-    assert b'Incorrect username or password.' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Incorrect username or password.' in error_message.string
 
 
 def test_submitting_incorrect_password_flashes_error(client, mock_user_details):
@@ -189,7 +195,10 @@ def test_submitting_incorrect_password_flashes_error(client, mock_user_details):
     response = client.post('/', data=request_data)
     assert response.status_code == 200
     assert b'<h2>Login</h2>' in response.data
-    assert b'Incorrect username or password.' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Incorrect username or password.' in error_message.string
 
 
 def test_submitting_correct_username_and_password_redirects_user_to_home(client, mock_user_details, mock_overdue_contacts):

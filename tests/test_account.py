@@ -128,8 +128,11 @@ def test_error_thrown_when_form_submitted_without_current_password(authenticated
                     'confirm_password': 'new_password'}
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
-    # assert response.status_code == 200
-    assert b'Current password is required' in response.data
+    assert response.status_code == 200
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Current password is required' in error_message.string
 
 
 def test_error_thrown_when_new_passwords_do_not_match(authenticated_client):
@@ -139,7 +142,10 @@ def test_error_thrown_when_new_passwords_do_not_match(authenticated_client):
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'New password and confirm new password must match' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'New password and confirm new password must match' in error_message.string
 
 
 def test_error_thrown_when_form_submitted_without_new_password(authenticated_client):
@@ -149,7 +155,10 @@ def test_error_thrown_when_form_submitted_without_new_password(authenticated_cli
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'New password is required' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'New password is required' in error_message.string
 
 
 def test_error_thrown_when_form_submitted_without_confirm_password(authenticated_client):
@@ -159,7 +168,10 @@ def test_error_thrown_when_form_submitted_without_confirm_password(authenticated
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'Confirm new password is required' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Confirm new password is required' in error_message.string
 
 
 def test_error_thrown_when_old_password_is_incorrect(authenticated_client,  mock_user_details):
@@ -169,7 +181,10 @@ def test_error_thrown_when_old_password_is_incorrect(authenticated_client,  mock
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'Current password is incorrect' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Current password is incorrect.' in error_message.string
 
 
 def test_user_can_change_password(authenticated_client, mock_user_details):
@@ -179,7 +194,10 @@ def test_user_can_change_password(authenticated_client, mock_user_details):
     response = authenticated_client.post(
         '/change_password', data=request_data, follow_redirects=True)
     assert response.status_code == 200
-    assert b'Password changed successfully' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    success_message = soupHtml.find('div', class_='flash-success')
+    assert success_message is not None
+    assert 'Password changed successfully' in success_message.string
 
 
 def test_user_can_delete_their_account(authenticated_client, mock_delete_user, mock_delete_user_database):
@@ -187,4 +205,7 @@ def test_user_can_delete_their_account(authenticated_client, mock_delete_user, m
         '/delete_user', follow_redirects=True)
     assert response.status_code == 200
     assert b'Login' in response.data
-    assert b'Account deleted successfully' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    success_message = soupHtml.find('div', class_='flash-success')
+    assert success_message is not None
+    assert 'Account deleted successfully' in success_message.string

@@ -111,8 +111,11 @@ def mock_database_no_overdue_contacts(mocker):
 def test_not_logged_in_user_redirected_to_login_page(client):
     response = client.get('/home', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Please log in to access this page.' in response.data
     assert b'<h2>Login</h2>' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Please log in to access this page.' in error_message.text
 
 
 def test_logged_in_user_can_access_home_page(authenticated_client, mock_database):

@@ -128,7 +128,10 @@ def test_error_is_displayed_when_username_is_blank(client):
                     'confirm_password': 'testPassword', 'email': 'test@email.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
-    assert b"Username is required" in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Username is required' in error_message.string
 
 
 def test_error_is_displayed_when_email_is_blank(client):
@@ -136,7 +139,10 @@ def test_error_is_displayed_when_email_is_blank(client):
                     'confirm_password': 'testPassword', 'email': ''}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
-    assert b"E-mail is required" in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'E-mail is required' in error_message.string
 
 
 def test_error_is_displayed_when_email_is_invalid(client):
@@ -144,7 +150,10 @@ def test_error_is_displayed_when_email_is_invalid(client):
                     'confirm_password': 'testPassword', 'email': 'testemail.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
-    assert b"E-mail is invalid" in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'E-mail is invalid' in error_message.string
 
 
 def test_error_is_displayed_when_password_is_blank(client):
@@ -152,7 +161,10 @@ def test_error_is_displayed_when_password_is_blank(client):
                     'confirm_password': 'testPassword', 'email': 'test@email.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
-    assert b"Password is required" in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Password is required' in error_message.string
 
 
 def test_error_is_displayed_when_passwords_do_not_match(client):
@@ -160,7 +172,10 @@ def test_error_is_displayed_when_passwords_do_not_match(client):
                     'confirm_password': 'testPassword2', 'email': 'test@mail.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
-    assert b"Password and confirm password must match" in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Password and confirm password must match' in error_message.string
 
 
 def test_error_is_displayed_when_username_already_exists(client, mock_user):
@@ -168,7 +183,10 @@ def test_error_is_displayed_when_username_already_exists(client, mock_user):
                     'confirm_password': 'testPassword', 'email': 'test@mail.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
-    assert b"Username is already taken" in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Username is already taken' in error_message.string
 
 
 def test_error_is_displayed_when_email_already_registered(client, mock_email_registered):
@@ -176,7 +194,11 @@ def test_error_is_displayed_when_email_already_registered(client, mock_email_reg
                     'confirm_password': 'testPassword', 'email': 'mock@email.com'}
     response = client.post('/register', data=request_data)
     assert response.status_code == 200
-    assert b"This e-mail address is already registered" in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find(
+        'div', class_='flash-error')
+    assert error_message is not None
+    assert 'This e-mail address is already registered' in error_message.string
 
 
 def test_user_can_register_and_is_redirected_to_login(client, mock_add_user):
@@ -186,4 +208,7 @@ def test_user_can_register_and_is_redirected_to_login(client, mock_add_user):
         '/register', data=request_data, follow_redirects=True)
     assert response.status_code == 200
     assert b'<h2>Login</h2>' in response.data
-    assert b'Account created successfully. Please login.' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    success_message = soupHtml.find('div', class_='flash-success')
+    assert success_message is not None
+    assert 'Account created successfully. Please login.' in success_message.string

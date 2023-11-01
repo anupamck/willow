@@ -198,7 +198,10 @@ def test_error_thrown_when_interaction_edited_without_title(authenticated_client
     response = authenticated_client.post(
         '/edit_interaction/1/1/Ashoka', data=request_data)
     assert response.status_code == 200
-    assert b'Title and notes are required.' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Title and notes are required.' in error_message.string
 
 
 def test_redirects_to_interaction_form_when_interaction_edited_successfully(authenticated_client, mock_database):
