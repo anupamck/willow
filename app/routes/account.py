@@ -74,3 +74,10 @@ def delete_user():
             flash('Account deleted successfully.', 'success')
             logout_user()
             return redirect(url_for('auth.login'))
+
+
+# Outgoing server: smtp.titan.email
+
+# Port: 465
+
+# Encryption method: SSL/TLS

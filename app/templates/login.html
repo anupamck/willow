@@ -12,6 +12,9 @@
                 <label for="password">Password:</label>
                 <input type="password" name="password" required aria-label="password"><br><br>
             </div>
+            <div>
+                <a href="{{ url_for('auth.forgot_password') }}">Forgot password?</a>
+            </div>
             <div class="flash-success">
                 {% for message in get_flashed_messages(with_categories=False, category_filter=('success')) %}
                 {{ message }}
@@ -27,7 +30,7 @@
         </form>
     </section>
     <div class="logo-image">
-        <img src="{{ url_for('static', filename='icon.png') }}" alt="Willow logo - a sketch of a willow tree">
+        <img src="{{ url_for('static', filename='cover.png') }}" alt="Willow logo - a sketch of a willow tree">
     </div>
 </div>
 {% endblock %}

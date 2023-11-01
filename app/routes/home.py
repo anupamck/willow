@@ -2,7 +2,6 @@ from flask import Blueprint, render_template
 from ..routes.db import DatabaseConnector, ContactManager, UserManager
 from flask_login import login_required, current_user
 from ..routes.auth import User
-from cryptography.fernet import Fernet
 import os
 
 

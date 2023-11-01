@@ -225,3 +225,26 @@ class UserManager:
                 return False
             else:
                 return True
+
+    def get_user_by_email(self, email_id):
+        query = 'SELECT * FROM users WHERE email = ?'
+        params = (email_id,)
+        with self.connector as cnx:
+            user_details_array = cnx.execute_query(query, params)
+            if len(user_details_array) == 1:
+                user_details = user_details_array[0]
+                return {
+                    'username': user_details[1],
+                    'password': user_details[2],
+                    'salt': user_details[3],
+                    'email': user_details[4],
+                    'database': os.path.join(os.getenv('DB_PATH'), user_details[5])
+                }
+            elif len(user_details_array) == 0:
+                return None
+            else:
+                raise Exception(
+                    'More than 1 user found with email_id ?', email_id)
+
+    def send_password_reset_email(self, email_id, token):
+        print('Sending password reset email to', email_id, 'with token', token)
