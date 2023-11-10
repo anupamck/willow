@@ -134,6 +134,32 @@ def test_error_is_displayed_when_username_is_blank(client):
     assert 'Username is required' in error_message.string
 
 
+def test_error_is_displayed_when_username_has_space(client, mock_add_user):
+    # Test that an error is thrown when the username has space
+    request_data = {'username': 'test User',
+                    'password': 'testPassword', 'email': 'test@email.com'}
+    response = client.post(
+        '/register', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Username cannot have special characters except underscore or period.' in error_message.string
+
+
+def test_error_is_displayed_when_username_has_special_characters(client, mock_add_user):
+    # Test that an error is thrown when the username has special characters
+    request_data = {'username': 'test@User',
+                    'password': 'testPassword', 'email': 'test@email.com'}
+    response = client.post(
+        '/register', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    error_message = soupHtml.find('div', class_='flash-error')
+    assert error_message is not None
+    assert 'Username cannot have special characters except underscore or period.' in error_message.string
+
+
 def test_error_is_displayed_when_email_is_blank(client):
     request_data = {'username': 'testUser',
                     'password': 'testPassword', 'email': ''}
@@ -192,6 +218,19 @@ def test_error_is_displayed_when_email_already_registered(client, mock_email_reg
 
 def test_user_can_register_and_is_redirected_to_login(client, mock_add_user):
     request_data = {'username': 'testUser', 'password': 'testPassword',
+                    'email': 'mock@email.com'}
+    response = client.post(
+        '/register', data=request_data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b'<h2>Login</h2>' in response.data
+    soupHtml = BeautifulSoup(response.data, 'html.parser')
+    success_message = soupHtml.find('div', class_='flash-success')
+    assert success_message is not None
+    assert 'Account created successfully. Please login.' in success_message.string
+
+
+def test_user_can_register_with_username_with_underscore(client, mock_add_user):
+    request_data = {'username': 'test_User', 'password': 'testPassword',
                     'email': 'mock@email.com'}
     response = client.post(
         '/register', data=request_data, follow_redirects=True)

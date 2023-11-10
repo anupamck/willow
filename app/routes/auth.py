@@ -135,6 +135,8 @@ def register():
         error = None
         if not username:
             error = 'Username is required.'
+        elif all(c.isalnum() or c in {'_', '.'} for c in username) is False:
+            error = "Username cannot have special characters except underscore or period."
         elif not email:
             error = 'E-mail is required.'
         # Write me a regex to validate email addresses
@@ -149,6 +151,7 @@ def register():
 
         with DatabaseConnector(database=users_db) as connector:
             user_manager = UserManager(connector)
+            print(user_manager.get_user(username))
             if user_manager.get_user(username) is not None:
                 error = 'Username is already taken.'
             elif user_manager.is_email_id_already_registered(email):
