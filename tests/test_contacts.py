@@ -143,7 +143,7 @@ def test_add_contact_form_is_rendered(authenticated_client, mock_database):
     assert b'<title>Willow - Contact Form</title>' in response.data
     assert b'Add Contact' in response.data
     assert b'<input type="text" id="name" name="name" value="" required>' in response.data
-    assert b'<input type="number" id="frequency" name="frequency" value="" required min="1">' in response.data
+    assert b'<input type="number" id="frequency" name="frequency" value="" required min="0">' in response.data
     assert b'<button type="submit">Save Changes</button>' in response.data
 
 
@@ -171,7 +171,7 @@ def test_edit_contact_form_is_rendered(authenticated_client, mock_database):
     assert b'<title>Willow - Contact Form</title>' in response.data
     assert b'Edit Contact' in response.data
     assert b'<input type="text" id="name" name="name" value="Ashoka" required>' in response.data
-    assert b'<input type="number" id="frequency" name="frequency" value="30" required min="1">' in response.data
+    assert b'<input type="number" id="frequency" name="frequency" value="30" required min="0">' in response.data
     assert b'<button type="submit">Save Changes</button>' in response.data
 
 
