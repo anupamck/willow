@@ -8,7 +8,6 @@ load_dotenv()
 
 
 def delete_user(username, db='local'):
-    print('db', db)
     if db == 'remote':
         db_folder = os.path.join(os.getenv('DB_PATH_REMOTE'))
     else:

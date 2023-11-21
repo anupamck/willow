@@ -224,7 +224,6 @@ def test_logged_in_user_is_redirected_to_homepage_on_accesssing_forgot_password_
 def test_forgot_password_form_is_rendered(client):
     response = client.get('/forgot_password')
     assert response.status_code == 200
-    print(response.data)
     assert b'<title>Willow - Forgot Password</title>' in response.data
     assert b'<h2>Forgot password?</h2>' in response.data
     assert b'<form action="/forgot_password" method="POST">' in response.data
@@ -311,7 +310,6 @@ def test_submitting_incomplete_password_reset_form_flashes_error(client, mock_va
     soupHtml = BeautifulSoup(response.data, 'html.parser')
     error_message = soupHtml.find('div', class_='flash-error')
     assert error_message is not None
-    print(error_message.string)
     assert 'Password is required.' in error_message.string
 
 

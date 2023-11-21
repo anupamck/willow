@@ -119,7 +119,6 @@ def mock_database_no_contacts(mocker):
 def test_not_logged_in_user_redirected_to_login_page(client):
     response = client.get('/contacts', follow_redirects=True)
     assert response.status_code == 200
-    print(response.data)
     assert b'Please log in to access this page.' in response.data
     assert b'<h2>Login</h2>' in response.data
 

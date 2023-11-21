@@ -151,7 +151,6 @@ def register():
 
         with DatabaseConnector(database=users_db) as connector:
             user_manager = UserManager(connector)
-            print(user_manager.get_user(username))
             if user_manager.get_user(username) is not None:
                 error = 'Username is already taken.'
             elif user_manager.is_email_id_already_registered(email):
